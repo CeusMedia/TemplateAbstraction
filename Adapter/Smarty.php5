@@ -1,19 +1,19 @@
 <?php
 /**
  *	Adapter for Smarty template engine.
- *	@category	dev
+ *	@category	cmModules
  *	@package	TEA.Adapter
  *	@author		Christian Würker <christian.wuerker@ceusmedia.de>
- *	@version	$Id: Smarty.php5 1311 2010-07-28 22:03:07Z christian.wuerker $
+ *	@version	$Id$
  */
 require_once '/var/www/lib/Smarty/3.0rc3/libs/Smarty.class.php';
 /**
  *	Adapter for Smarty template engine.
- *	@category	dev
+ *	@category	cmModules
  *	@package	TEA.Adapter
  *	@extends	TEA_Adapter_Abstract
  *	@author		Christian Würker <christian.wuerker@ceusmedia.de>
- *	@version	$Id: Smarty.php5 1311 2010-07-28 22:03:07Z christian.wuerker $
+ *	@version	$Id$
  */
 class TEA_Adapter_Smarty extends TEA_Adapter_Abstract {
 

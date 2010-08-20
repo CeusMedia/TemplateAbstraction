@@ -1,19 +1,19 @@
 <?php
 /**
  *	Adapter for PHPTAL template engine.
- *	@category	dev
+ *	@category	cmModules
  *	@package	TEA.Adapter
  *	@author		Christian Würker <christian.wuerker@ceusmedia.de>
- *	@version	$Id: PHPTAL.php5 1311 2010-07-28 22:03:07Z christian.wuerker $
+ *	@version	$Id$
  */
 CMC_Loader::registerNew( 'php', NULL, '/var/www/lib/phptal/1.2.1/classes/' );
 /**
  *	Adapter for PHPTAL template engine.
- *	@category	dev
+ *	@category	cmModules
  *	@package	TEA.Adapter
  *	@extends	TEA_Adapter_Abstract
  *	@author		Christian Würker <christian.wuerker@ceusmedia.de>
- *	@version	$Id: PHPTAL.php5 1311 2010-07-28 22:03:07Z christian.wuerker $
+ *	@version	$Id$
  */
 class TEA_Adapter_PHPTAL extends TEA_Adapter_Abstract {
 

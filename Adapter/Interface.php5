@@ -1,17 +1,17 @@
 <?php
 /**
  *	Interface for each template engine in factory.
- *	@category	dev
+ *	@category	cmModules
  *	@package	TEA.Adapter
  *	@author		Christian Würker <christian.wuerker@ceusmedia.de>
- *	@version	$Id: Interface.php5 1311 2010-07-28 22:03:07Z christian.wuerker $
+ *	@version	$Id$
  */
 /**
  *	Interface for each template engine in factory.
- *	@category	dev
+ *	@category	cmModules
  *	@package	TEA.Adapter
  *	@author		Christian Würker <christian.wuerker@ceusmedia.de>
- *	@version	$Id: Interface.php5 1311 2010-07-28 22:03:07Z christian.wuerker $
+ *	@version	$Id$
  */
 interface TEA_Adapter_Interface {
 
