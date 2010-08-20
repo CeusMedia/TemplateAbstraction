@@ -1,20 +1,20 @@
 <?php
 /**
  *	Adapter for Twig template engine.
- *	@category	dev
+ *	@category	cmModules
  *	@package	TEA.Adapter
  *	@author		Christian Würker <christian.wuerker@ceusmedia.de>
- *	@version	$Id: Twig.php5 1311 2010-07-28 22:03:07Z christian.wuerker $
+ *	@version	$Id$
  */
 #require_once 'Twig/trunk/Autoloader.php';
 CMC_Loader::registerNew( 'php', 'Twig', '/var/www/lib/Twig/trunk/' );
 /**
  *	Adapter for Twig template engine.
- *	@category	dev
+ *	@category	cmModules
  *	@package	TEA.Adapter
  *	@extends	TEA_Adapter_Abstract
  *	@author		Christian Würker <christian.wuerker@ceusmedia.de>
- *	@version	$Id: Twig.php5 1311 2010-07-28 22:03:07Z christian.wuerker $
+ *	@version	$Id$
  */
 class TEA_Adapter_Twig extends TEA_Adapter_Abstract {
 

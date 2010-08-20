@@ -1,17 +1,17 @@
 <?php
 /**
  *	Factory for template from several template engines.
- *	@category	dev
+ *	@category	cmModules
  *	@package	TEA
  *	@author		Christian Würker <christian.wuerker@ceusmedia.de>
- *	@version	$Id: Factory.php5 1311 2010-07-28 22:03:07Z christian.wuerker $
+ *	@version	$Id$
  */
 /**
  *	Factory for template from several template engines.
- *	@category	dev
+ *	@category	cmModules
  *	@package	TEA
  *	@author		Christian Würker <christian.wuerker@ceusmedia.de>
- *	@version	$Id: Factory.php5 1311 2010-07-28 22:03:07Z christian.wuerker $
+ *	@version	$Id$
  */
 class TEA_Factory{
 

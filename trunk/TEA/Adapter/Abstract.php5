@@ -1,18 +1,18 @@
 <?php
 /**
  *	Abstract basic adapter implementation.
- *	@category	dev
+ *	@category	cmModules
  *	@package	TEA.Adapter
  *	@author		Christian Würker <christian.wuerker@ceusmedia.de>
- *	@version	$Id: Abstract.php5 1311 2010-07-28 22:03:07Z christian.wuerker $
+ *	@version	$Id$
  */
 /**
  *	Abstract basic adapter implementation.
- *	@category	dev
+ *	@category	cmModules
  *	@package	TEA.Adapter
  *	@implements	TEA_Adapter_Interface
  *	@author		Christian Würker <christian.wuerker@ceusmedia.de>
- *	@version	$Id: Abstract.php5 1311 2010-07-28 22:03:07Z christian.wuerker $
+ *	@version	$Id$
  */
 abstract class TEA_Adapter_Abstract implements TEA_Adapter_Interface {
 
