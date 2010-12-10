@@ -13,7 +13,7 @@
  *	@author		Christian Würker <christian.wuerker@ceusmedia.de>
  *	@version	$Id$
  */
-class TEA_Factory{
+class CMM_TEA_Factory{
 
 	protected $defaultType		= 'cmc';
 	protected $pathCache		= 'templates/cache/';
@@ -41,7 +41,7 @@ class TEA_Factory{
 	}
 
 	public function newTemplate( $type, $fileName = NULL, $data = NULL ){
-		$className	= 'TEA_Adapter_'.$type;
+		$className	= 'CMM_TEA_Adapter_'.$type;
 		if( !class_exists( $className ) )
 			throw new RuntimeException( 'Template engine "'.$type.'" not registered' );
 		$reflection	= new ReflectionClass( $className );

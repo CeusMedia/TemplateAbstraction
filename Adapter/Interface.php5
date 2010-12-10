@@ -1,27 +1,27 @@
 <?php
 /**
  *	Interface for each template engine in factory.
- *	@category	cmModules
- *	@package	TEA.Adapter
- *	@author		Christian Würker <christian.wuerker@ceusmedia.de>
- *	@version	$Id$
+ *	@category		cmModules
+ *	@package		TEA.Adapter
+ *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
+ *	@version		$Id$
  */
 /**
  *	Interface for each template engine in factory.
- *	@category	cmModules
- *	@package	TEA.Adapter
- *	@author		Christian Würker <christian.wuerker@ceusmedia.de>
- *	@version	$Id$
+ *	@category		cmModules
+ *	@package		TEA.Adapter
+ *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
+ *	@version		$Id$
  */
-interface TEA_Adapter_Interface {
+interface CMM_TEA_Adapter_Interface {
 
 	/**
 	 *	Constructor.
 	 *	@access		public
-	 *	@param		TEA_Factory		$factory		TEA factory instance
+	 *	@param		CMM_TEA_Factory		$factory		TEA factory instance
 	 *	@return		void
 	 */
-	public function __construct( TEA_Factory $factory );
+	public function __construct( CMM_TEA_Factory $factory );
 
 	/**
 	 *	Assigns context data for template.

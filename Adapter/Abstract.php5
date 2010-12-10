@@ -1,20 +1,20 @@
 <?php
 /**
  *	Abstract basic adapter implementation.
- *	@category	cmModules
- *	@package	TEA.Adapter
- *	@author		Christian Würker <christian.wuerker@ceusmedia.de>
- *	@version	$Id$
+ *	@category		cmModules
+ *	@package		TEA.Adapter
+ *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
+ *	@version		$Id$
  */
 /**
  *	Abstract basic adapter implementation.
- *	@category	cmModules
- *	@package	TEA.Adapter
- *	@implements	TEA_Adapter_Interface
- *	@author		Christian Würker <christian.wuerker@ceusmedia.de>
- *	@version	$Id$
+ *	@category		cmModules
+ *	@package		TEA.Adapter
+ *	@implements		CMM_TEA_Adapter_Interface
+ *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
+ *	@version		$Id$
  */
-abstract class TEA_Adapter_Abstract implements TEA_Adapter_Interface {
+abstract class CMM_TEA_Adapter_Abstract implements CMM_TEA_Adapter_Interface {
 
 	protected $data			= array();
 	protected $factory		= NULL;
@@ -26,10 +26,10 @@ abstract class TEA_Adapter_Abstract implements TEA_Adapter_Interface {
 	/**
 	 *	Constructor.
 	 *	@access		public
-	 *	@param		TEA_Factory		$factory		TEA factory instance
+	 *	@param		CMM_TEA_Factory		$factory		TEA factory instance
 	 *	@return		void
 	 */
-	public function __construct( TEA_Factory $factory ){
+	public function __construct( CMM_TEA_Factory $factory ){
 		$this->factory	= $factory;
 	}
 

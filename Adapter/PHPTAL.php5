@@ -1,21 +1,21 @@
 <?php
 /**
  *	Adapter for PHPTAL template engine.
- *	@category	cmModules
- *	@package	TEA.Adapter
- *	@author		Christian Würker <christian.wuerker@ceusmedia.de>
- *	@version	$Id$
+ *	@category		cmModules
+ *	@package		TEA.Adapter
+ *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
+ *	@version		$Id$
  */
 CMC_Loader::registerNew( 'php', NULL, '/var/www/lib/phptal/1.2.1/classes/' );
 /**
  *	Adapter for PHPTAL template engine.
- *	@category	cmModules
- *	@package	TEA.Adapter
- *	@extends	TEA_Adapter_Abstract
- *	@author		Christian Würker <christian.wuerker@ceusmedia.de>
- *	@version	$Id$
+ *	@category		cmModules
+ *	@package		TEA.Adapter
+ *	@extends		CMM_TEA_Adapter_Abstract
+ *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
+ *	@version		$Id$
  */
-class TEA_Adapter_PHPTAL extends TEA_Adapter_Abstract {
+class CMM_TEA_Adapter_PHPTAL extends CMM_TEA_Adapter_Abstract {
 
 	/**
 	 *	Returns rendered template content.
