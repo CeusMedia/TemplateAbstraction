@@ -1,20 +1,21 @@
 <?php
 /**
- *	Adapter for cmClasses template engine.
+ *	Adapter for phpHaml template engine.
  *	@category		cmModules
  *	@package		TEA.Adapter
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
  *	@version		$Id$
  */
+require_once 'phpHaml/1.0/includes/haml/HamlParser.class.php';
 /**
- *	Adapter for cmClasses template engine.
+ *	Adapter for phpHaml template engine.
  *	@category		cmModules
  *	@package		TEA.Adapter
- *	@extends		Template_Adapter_Abstract
+ *	@extends		CMM_TEA_Adapter_Abstract
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
  *	@version		$Id$
  */
-class CMM_TEA_Adapter_CMC extends CMM_TEA_Adapter_Abstract {
+class CMM_TEA_Adapter_phpHaml extends CMM_TEA_Adapter_Abstract {
 
 	/**
 	 *	Returns rendered template content.
@@ -22,8 +23,11 @@ class CMM_TEA_Adapter_CMC extends CMM_TEA_Adapter_Abstract {
 	 *	@return		string
 	 */
 	public function render(){
-		$pathName	= $this->pathSource.$this->fileSource;
-		$content	= UI_Template::render( $pathName, $this->data );
+		if( !$this->fileSource )
+			throw new RuntimeException( 'No source file set' );
+		$engine	= new HamlParser( $this->pathSource, $this->pathCache );
+		$engine->append( $this->data );
+		$content	= $engine->fetch( $this->fileSource );
 		$content	= $this->removeTypeIdentifier( $content );
 		return $content;
 	}

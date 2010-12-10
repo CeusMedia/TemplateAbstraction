@@ -1,22 +1,22 @@
 <?php
 /**
  *	Adapter for Twig template engine.
- *	@category	cmModules
- *	@package	TEA.Adapter
- *	@author		Christian Würker <christian.wuerker@ceusmedia.de>
- *	@version	$Id$
+ *	@category		cmModules
+ *	@package		TEA.Adapter
+ *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
+ *	@version		$Id$
  */
 #require_once 'Twig/trunk/Autoloader.php';
 CMC_Loader::registerNew( 'php', 'Twig', '/var/www/lib/Twig/trunk/' );
 /**
  *	Adapter for Twig template engine.
- *	@category	cmModules
- *	@package	TEA.Adapter
- *	@extends	TEA_Adapter_Abstract
- *	@author		Christian Würker <christian.wuerker@ceusmedia.de>
- *	@version	$Id$
+ *	@category		cmModules
+ *	@package		TEA.Adapter
+ *	@extends		CMM_TEA_Adapter_Abstract
+ *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
+ *	@version		$Id$
  */
-class TEA_Adapter_Twig extends TEA_Adapter_Abstract {
+class CMM_TEA_Adapter_Twig extends CMM_TEA_Adapter_Abstract {
 
 	protected $template	= NULL;
 
