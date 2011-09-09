@@ -6,7 +6,6 @@
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
  *	@version		$Id$
  */
-require_once '/var/www/lib/Smarty/3.0rc3/libs/Smarty.class.php';
 /**
  *	Adapter for Smarty template engine.
  *	@category		cmModules

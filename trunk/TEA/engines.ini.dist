@@ -1,0 +1,21 @@
+[CMC]
+active		= 1
+
+[Smarty]
+active		= 1
+loadFile	= "Smarty/3.0/libs/Smarty.class.php"
+
+[phpHaml]
+active		= 1
+loadFile	= "phpHaml/1.0/includes/haml/HamlParser.class.php"
+
+[Twig]
+active		= 1
+loadPath	= "/var/www/lib/Twig/trunk/"
+loadPrefix	= "Twig"
+loadExtension	= "php"
+
+[PHPTAL]
+active		= 1
+loadPath	= "/var/www/lib/PHPTAL/trunk/classes/"
+loadExtension	= "php"

@@ -6,7 +6,6 @@
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
  *	@version		$Id$
  */
-require_once 'phpHaml/1.0/includes/haml/HamlParser.class.php';
 /**
  *	Adapter for phpHaml template engine.
  *	@category		cmModules
