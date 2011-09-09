@@ -20,6 +20,10 @@ class CMM_TEA_Factory{
 	protected $pathTemplates	= 'templates/';
 	protected $patternType		= '/^<!--TEA:(\S+)-->\n?\r?/';
 
+	public function __construct(){
+		$this->engines	= parse_ini_file( dirname( __FILE__ ).'/engines.ini', TRUE );
+	}
+
 	public function identifyType( $fileName ){
 		$content	= File_Reader::load( $this->pathTemplates.$fileName );
 		$matches	= array();
@@ -32,6 +36,29 @@ class CMM_TEA_Factory{
 		return $this->patternType;
 	}
 
+	protected function initializeEngine( $type ){
+		if( empty( $this->engines[$type] ) )
+			throw new RuntimeException( 'Unknown engine "'.$type.'"' ); 
+		$engine	= $this->engines[$type];
+		switch( $this->engines[$type]['active'] ){
+			case 0:
+				throw new RuntimeException( 'Engine "'.$type.'" not enabled' ); 
+			case 1:
+				if( !empty( $engine['loadFile'] ) )
+					require_once $engine['loadFile'];
+				else if( !empty( $engine['loadPath'] ) ){
+					$path	= $engine['loadPath'];
+					$ext	= empty( $engine['loadExtension'] ) ? 'php' : $engine['loadExtension'];
+					$prefix	= empty( $engine['loadPrefix'] ) ? NULL : $engine['loadPrefix'];
+					CMC_Loader::registerNew( $ext, $prefix, $path );
+				}
+				$this->engines['active']	= 2;
+				break;
+			case 2:
+				break;
+		}
+	}
+
 	public function getTemplate( $fileName, $data = NULL ){
 		$type	= $this->identifyType( $fileName );
 		$type	= $type ? $type : $this->defaultType;
@@ -41,6 +68,8 @@ class CMM_TEA_Factory{
 	}
 
 	public function newTemplate( $type, $fileName = NULL, $data = NULL ){
+		$this->initializeEngine( $type );
+		
 		$className	= 'CMM_TEA_Adapter_'.$type;
 		if( !class_exists( $className ) )
 			throw new RuntimeException( 'Template engine "'.$type.'" not registered' );

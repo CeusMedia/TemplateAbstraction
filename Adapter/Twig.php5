@@ -6,8 +6,6 @@
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
  *	@version		$Id$
  */
-#require_once 'Twig/trunk/Autoloader.php';
-CMC_Loader::registerNew( 'php', 'Twig', '/var/www/lib/Twig/trunk/' );
 /**
  *	Adapter for Twig template engine.
  *	@category		cmModules

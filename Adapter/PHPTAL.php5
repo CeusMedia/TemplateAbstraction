@@ -6,7 +6,6 @@
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
  *	@version		$Id$
  */
-CMC_Loader::registerNew( 'php', NULL, '/var/www/lib/phptal/1.2.1/classes/' );
 /**
  *	Adapter for PHPTAL template engine.
  *	@category		cmModules
