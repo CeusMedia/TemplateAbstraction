@@ -16,15 +16,32 @@
 class CMM_TEA_Factory{
 
 	protected $defaultType		= 'cmc';
-	protected $pathCache		= 'templates/cache/';
 	protected $pathTemplates	= 'templates/';
-	protected $patternType		= '/^<!--TEA:(\S+)-->\n?\r?/';
+	protected $pathCache		= 'templates/cache/';
+	protected $pathCompile		= 'templates/compiled/';
+	public $patternType			= '/^<!--TEA:(\S+)-->\n?\r?/';
 
+	/**
+	 *	Constructor.
+	 *	Loads engine definitions from engine.ini.
+	 *	@access		public
+	 *	@return		void
+	 */
 	public function __construct(){
-		$this->engines	= parse_ini_file( dirname( __FILE__ ).'/engines.ini', TRUE );
+		$fileName		= dirname( __FILE__ ).'/engines.ini';
+		if( !file_exists( $fileName ) )
+			throw new RuntimeException( 'engines.ini is missing' );
+		$this->engines	= parse_ini_file( $fileName, TRUE );
 	}
 
-	public function identifyType( $fileName ){
+	/**
+	 *	Tries to identify engine type by looking for a specific header pattern within a template.
+	 *	Returns every found type even if not supported.
+	 *	@access		protected
+	 *	@param		string		$fileName		File name of template within template path
+	 *	@return		string|NULL
+	 */
+	protected function identifyType( $fileName ){
 		$content	= File_Reader::load( $this->pathTemplates.$fileName );
 		$matches	= array();
 		if( preg_match_all( $this->patternType, $content, $matches ) )
@@ -32,10 +49,58 @@ class CMM_TEA_Factory{
 		return NULL;
 	}
 
-	public function getPattern(){
-		return $this->patternType;
+	/**
+	 *	Loads a template after identifying its engine type.
+	 *	If the engine type is known use newTemplate to avoid engine type detection.
+	 *	@access		public
+	 *	@param		string		$fileName		File name of template within set template path
+	 *	@param		array		$data			Map of template pairs
+	 *	@return		CMM_TEA_Adapter_Abstract
+	 *	@throws		RuntimeException	if no engine type could be identified
+	 */
+	public function getTemplate( $fileName, $data = NULL ){
+		$type	= $this->identifyType( $fileName );
+		$type	= $type ? $type : $this->defaultType;
+		if( !$type )
+			throw new RuntimeException( 'No type identified or set' );
+		return $this->newTemplate( $type, $fileName, $data );
 	}
 
+	/**
+	 *	Loads a template of a known engine type.
+	 *	@access		public
+	 *	@param		string		$type			Engine type key, case sensitive, see engines.ini
+	 *	@param		string		$fileName		File name of template within set template path
+	 *	@param		array		$data			Map of template pairs
+	 *	@return		CMM_TEA_Adapter_Abstract
+	 */
+	public function newTemplate( $type, $fileName = NULL, $data = NULL ){
+		$this->initializeEngine( $type );
+		$className	= 'CMM_TEA_Adapter_'.$type;
+		$reflection	= new ReflectionClass( $className );
+		$template	= $reflection->newInstanceArgs( array( $this ) );
+		$template->setSourcePath( $this->pathTemplates );
+		if( $this->pathCache )
+			$template->setCachePath( $this->pathCache );
+		if( $this->pathCompile )
+			$template->setCompilePath( $this->pathCompile );
+		if( !empty( $fileName ) )
+			$template->setSourceFile( $fileName );
+		if( $data )
+			$template->setData( $data );
+		return $template;
+	}
+
+	/**
+	 *	Checks engine settings.
+	 *	Tries to load engine from file or registers an autoloader for a path.
+	 *	Notes ready state of engine and skips on a second run.
+	 *	@access		protected
+	 *	@param		string		$type		Engine type key
+	 *	@return		void
+	 *	@throws		RuntimeException	if engine type is unknown
+	 *	@throws		RuntimeException	if engine is not enabled
+	 */
 	protected function initializeEngine( $type ){
 		if( empty( $this->engines[$type] ) )
 			throw new RuntimeException( 'Unknown engine "'.$type.'"' ); 
@@ -59,40 +124,42 @@ class CMM_TEA_Factory{
 		}
 	}
 
-	public function getTemplate( $fileName, $data = NULL ){
-		$type	= $this->identifyType( $fileName );
-		$type	= $type ? $type : $this->defaultType;
-		if( !$type )
-			throw new RuntimeException( 'No type identified or set' );
-		return $this->newTemplate( $type, $fileName, $data );
-	}
-
-	public function newTemplate( $type, $fileName = NULL, $data = NULL ){
-		$this->initializeEngine( $type );
-		
-		$className	= 'CMM_TEA_Adapter_'.$type;
-		if( !class_exists( $className ) )
-			throw new RuntimeException( 'Template engine "'.$type.'" not registered' );
-		$reflection	= new ReflectionClass( $className );
-		$template	= $reflection->newInstanceArgs( array( $this ) );
-		$template->setSourcePath( $this->pathTemplates );
-		if( $this->pathCache )
-			$template->setCachePath( $this->pathCache );
-		if( !empty( $fileName ) )
-			$template->setSourceFile( $fileName );
-		if( $data )
-			$template->setData( $data );
-		return $template;
-	}
-
+	/**
+	 *	Sets path to cache folder.
+	 *	@access		public
+	 *	@param		string			$path			Path to cache folder
+	 *	@return		void
+	 */
 	public function setCachePath( $path ){
 		$this->pathCache	= $path;
 	}
 
+	/**
+	 *	Sets path to compile folder.
+	 *	@access		public
+	 *	@param		string			$path			Path to compile folder
+	 *	@return		void
+	 */
+	public function setCompilePath( $path ){
+		$this->pathCompile	= $path;
+	}
+
+	/**
+	 *	Sets default template engine type.
+	 *	@access		public
+	 *	@param		string			$type			Engine type to set as default
+	 *	@return		void
+	 */
 	public function setDefaultType( $type ){
 		$this->defaultType	= $type;
 	}
 
+	/**
+	 *	Sets path to template folder.
+	 *	@access		public
+	 *	@param		string			$path			Path to template folder
+	 *	@return		void
+	 */
 	public function setTemplatePath( $path ){
 		$this->pathTemplates	= $path;
 	}
