@@ -32,7 +32,7 @@ class CMM_TEA_Adapter_Twig extends CMM_TEA_Adapter_Abstract {
 	public function setSourceFile( $fileName ){
 		$loader = new Twig_Loader_Filesystem( $this->pathSource );
 		$env = new Twig_Environment($loader, array(
-		#  'cache' => $this->pathCache,
+		  'cache' => $this->pathCache,
 		));
 		$this->template = $env->loadTemplate( $fileName );
 	}
@@ -40,7 +40,7 @@ class CMM_TEA_Adapter_Twig extends CMM_TEA_Adapter_Abstract {
 	public function setSourceString( $string ){
 		$loader = new Twig_Loader_String();
 		$env = new Twig_Environment($loader, array(
-		#  'cache' => $this->pathTemplateCache,
+		  'cache' => $this->pathCache,
 		));
 		$this->template = $env->loadTemplate( $string );
 	}

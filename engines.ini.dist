@@ -19,3 +19,7 @@ loadExtension	= "php"
 active		= 1
 loadPath	= "/var/www/lib/PHPTAL/trunk/classes/"
 loadExtension	= "php"
+
+[Dwoo]
+active		= 1
+loadFile	= "dwoo/1.1.1/dwooAutoload.php"

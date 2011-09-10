@@ -21,6 +21,7 @@ abstract class CMM_TEA_Adapter_Abstract implements CMM_TEA_Adapter_Interface {
 	protected $fileSource	= NULL;
 	protected $pathSource	= '';
 	protected $pathCache	= '';
+	protected $pathCompile	= '';
 	protected $template		= '';
 
 	/**
@@ -54,18 +55,27 @@ abstract class CMM_TEA_Adapter_Abstract implements CMM_TEA_Adapter_Interface {
 	 *	@return		string			Rendered template content without type identifier
 	 */
 	protected function removeTypeIdentifier( $content ){
-		$pattern	= $this->factory->getPattern();
-		return preg_replace( $pattern, '', $content );
+		return preg_replace( $this->factory->patternType, '', $content );
 	}
 
 	/**
-	 *	Sets path to cache or compile folder.
+	 *	Sets path to cache folder.
 	 *	@access		public
-	 *	@param		string			$path			Path to cache or compile folder
+	 *	@param		string			$path			Path to cache folder
 	 *	@return		void
 	 */
 	public function setCachePath( $path ){
 		$this->pathCache	= $path;
+	}
+
+	/**
+	 *	Sets path to compile folder.
+	 *	@access		public
+	 *	@param		string			$path			Path to compile folder
+	 *	@return		void
+	 */
+	public function setCompilePath( $path ){
+		$this->pathCompile	= $path;
 	}
 
 	/**

@@ -41,12 +41,20 @@ interface CMM_TEA_Adapter_Interface {
 	public function render();
 
 	/**
-	 *	Sets path to cache or compile folder.
+	 *	Sets path to compile folder.
 	 *	@access		public
-	 *	@param		string			$path			Path to cache or compile folder
+	 *	@param		string			$path			Path to cache folder
 	 *	@return		void
 	 */
 	public function setCachePath( $path );
+
+	/**
+	 *	Sets path to cache or compile folder.
+	 *	@access		public
+	 *	@param		string			$path			Path to compile folder
+	 *	@return		void
+	 */
+	public function setCompilePath( $path );
 
 	/**
 	 *	Assigns a map of context data for template.
