@@ -1,6 +1,9 @@
 [CMC]
 active		= 1
 
+[STE]
+active		= 1
+
 [Smarty]
 active		= 1
 loadFile	= "Smarty/3.0/libs/Smarty.class.php"
