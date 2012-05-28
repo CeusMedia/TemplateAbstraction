@@ -15,7 +15,8 @@
  */
 class CMM_TEA_Factory{
 
-	protected $defaultType		= 'cmc';
+	protected $defaultType		= 'STE';
+	protected $engines			= array();
 	protected $pathTemplates	= 'templates/';
 	protected $pathCache		= 'templates/cache/';
 	protected $pathCompile		= 'templates/compiled/';
@@ -25,13 +26,27 @@ class CMM_TEA_Factory{
 	 *	Constructor.
 	 *	Loads engine definitions from engine.ini.
 	 *	@access		public
+	 *	@param		string|array	$config		Filename of config file OR configuration as array
 	 *	@return		void
 	 */
-	public function __construct(){
-		$fileName		= dirname( __FILE__ ).'/engines.ini';
-		if( !file_exists( $fileName ) )
-			throw new RuntimeException( 'engines.ini is missing' );
-		$this->engines	= parse_ini_file( $fileName, TRUE );
+	public function __construct( $config = NULL ){
+		if( is_array( $config ) )
+			$this->engines	= $config;
+		else{
+			$fileName		= $config ? $config : dirname( __FILE__ ).'/engines.ini';
+			if( !file_exists( $fileName ) )
+				throw new RuntimeException( 'Config file "'.$fileName.'" is missing' );
+			$this->engines	= parse_ini_file( $fileName, TRUE );
+		}
+		if( !array_key_exists( $this->defaultType, $this->engines ) ){
+			$this->defaultType		= NULL;
+			foreach( $this->engines as $engineName => $engineData ){
+				if( !empty( $engineData['default'] ) ){
+					$this->defaultType		= $engineName;
+					break;
+				}
+			}
+		}
 	}
 
 	/**
@@ -62,35 +77,14 @@ class CMM_TEA_Factory{
 		$type	= $this->identifyType( $fileName );
 		$type	= $type ? $type : $this->defaultType;
 		if( !$type )
-			throw new RuntimeException( 'No type identified or set' );
+			throw new RuntimeException( 'No engine identified or set' );
 		return $this->newTemplate( $type, $fileName, $data );
 	}
 
-	/**
-	 *	Loads a template of a known engine type.
-	 *	@access		public
-	 *	@param		string		$type			Engine type key, case sensitive, see engines.ini
-	 *	@param		string		$fileName		File name of template within set template path
-	 *	@param		array		$data			Map of template pairs
-	 *	@return		CMM_TEA_Adapter_Abstract
-	 */
-	public function newTemplate( $type, $fileName = NULL, $data = NULL ){
-		$this->initializeEngine( $type );
-		$className	= 'CMM_TEA_Adapter_'.$type;
-		$reflection	= new ReflectionClass( $className );
-		$template	= $reflection->newInstanceArgs( array( $this ) );
-		$template->setSourcePath( $this->pathTemplates );
-		if( $this->pathCache )
-			$template->setCachePath( $this->pathCache );
-		if( $this->pathCompile )
-			$template->setCompilePath( $this->pathCompile );
-		if( !empty( $fileName ) )
-			$template->setSourceFile( $fileName );
-		if( $data )
-			$template->setData( $data );
-		return $template;
+	public function hasEngine( $type ){
+		return array_key_exists( $type, $this->engines );
 	}
-
+	
 	/**
 	 *	Checks engine settings.
 	 *	Tries to load engine from file or registers an autoloader for a path.
@@ -125,6 +119,31 @@ class CMM_TEA_Factory{
 	}
 
 	/**
+	 *	Loads a template of a known engine type.
+	 *	@access		public
+	 *	@param		string		$type			Engine type key, case sensitive, see engines.ini
+	 *	@param		string		$fileName		File name of template within set template path
+	 *	@param		array		$data			Map of template pairs
+	 *	@return		CMM_TEA_Adapter_Abstract
+	 */
+	public function newTemplate( $type, $fileName = NULL, $data = NULL ){
+		$this->initializeEngine( $type );
+		$className	= 'CMM_TEA_Adapter_'.$type;
+		$reflection	= new ReflectionClass( $className );
+		$template	= $reflection->newInstanceArgs( array( $this ) );
+		$template->setSourcePath( $this->pathTemplates );
+		if( $this->pathCache )
+			$template->setCachePath( $this->pathCache );
+		if( $this->pathCompile )
+			$template->setCompilePath( $this->pathCompile );
+		if( !empty( $fileName ) )
+			$template->setSourceFile( $fileName );
+		if( $data )
+			$template->setData( $data );
+		return $template;
+	}
+
+	/**
 	 *	Sets path to cache folder.
 	 *	@access		public
 	 *	@param		string			$path			Path to cache folder
@@ -151,6 +170,8 @@ class CMM_TEA_Factory{
 	 *	@return		void
 	 */
 	public function setDefaultType( $type ){
+		if( !array_key_exists( $type, $this->engines ) )
+			throw new RuntimeException( 'Engine "'.$type.'" is not available' );
 		$this->defaultType	= $type;
 	}
 
