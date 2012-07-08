@@ -25,10 +25,9 @@ class CMM_TEA_Adapter_PHP extends CMM_TEA_Adapter_Abstract {
 	 *	@return		string
 	 */
 	public function render(){
-		$pathName	= $this->pathSource.$this->fileSource;
 		extract( $this->data );
 		ob_start();
-		$result		= require( $pathName );
+		$result		= require( $this->pathSource.$this->fileSource );
 		$buffer		= ob_get_clean();
 		$content	= $result;
 		if( trim( $buffer ) )
