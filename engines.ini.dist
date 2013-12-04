@@ -1,28 +1,35 @@
+
 [CMC]
-active		= 1
+active			= 1
 
 [STE]
-active		= 1
+active			= 1
 
 [Smarty]
-active		= 1
-loadFile	= "Smarty/3.0/libs/Smarty.class.php"
+active			= 1
+loadFile		= "Smarty/3.0/libs/Smarty.class.php"
 
 [phpHaml]
-active		= 1
-loadFile	= "phpHaml/1.0/includes/haml/HamlParser.class.php"
+active			= 1
+loadFile		= "phpHaml/1.0/includes/haml/HamlParser.class.php"
 
 [Twig]
-active		= 1
-loadPath	= "/var/www/lib/Twig/trunk/"
-loadPrefix	= "Twig"
+active			= 1
 loadExtension	= "php"
+loadPath		= "/var/www/lib/Twig/trunk/"
+loadPrefix		= "Twig"
 
 [PHPTAL]
-active		= 1
-loadPath	= "/var/www/lib/PHPTAL/trunk/classes/"
+active			= 1
+loadPath		= "/var/www/lib/PHPTAL/trunk/classes/"
 loadExtension	= "php"
 
 [Dwoo]
-active		= 1
-loadFile	= "dwoo/1.1.1/dwooAutoload.php"
+active			= 1
+loadFile		= "dwoo/1.1.1/dwooAutoload.php"
+
+[Mustache]
+active			= 1
+loadExtension	= "php"
+loadPath		= "/var/www/lib/mustache.php/src/Mustache/";
+loadPrefix		= "Mustache_";
