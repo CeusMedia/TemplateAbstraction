@@ -64,6 +64,12 @@ class CMM_TEA_Factory{
 		return NULL;
 	}
 
+	public function getEngineSettings( $type ){
+		if( !array_key_exists( $type, $this->engines ) )
+			throw new DomainException( 'Unknown engine "'.$type.'"' );
+		return $this->engines[$type];
+	}
+	
 	/**
 	 *	Loads a template after identifying its engine type.
 	 *	If the engine type is known use newTemplate to avoid engine type detection.

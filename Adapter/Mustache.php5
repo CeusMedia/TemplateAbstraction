@@ -22,8 +22,15 @@ class CMM_TEA_Adapter_Mustache extends CMM_TEA_Adapter_Abstract {
 	 *	@return		string
 	 */
 	public function render(){
-		$engine	= new Mustache_Engine;
-		return $engine->render( $this->template, $this->data );
+		$settings	= $this->factory->getEngineSettings( 'Mustache' );
+		$options	= array();
+		if( isset( $settings['extension'] ) )
+			$options['extension']	= $settings['extension'];
+		$engine		= new Mustache_Engine;
+		$loader		= new Mustache_Loader_FilesystemLoader( $this->pathSource, $options );
+		$engine->setLoader( $loader );
+		$template	= $engine->loadTemplate( $this->fileSource );
+		return $template->render( $this->data );
 	}
 }
 ?>
