@@ -102,26 +102,22 @@ class CMM_TEA_Factory{
 	 *	@throws		RuntimeException	if engine is not enabled
 	 */
 	protected function initializeEngine( $type ){
-		if( empty( $this->engines[$type] ) )
-			throw new RuntimeException( 'Unknown engine "'.$type.'"' ); 
-		$engine	= $this->engines[$type];
-		switch( $this->engines[$type]['active'] ){
-			case 0:
-				throw new RuntimeException( 'Engine "'.$type.'" not enabled' ); 
-			case 1:
-				if( !empty( $engine['loadFile'] ) )
-					require_once $engine['loadFile'];
-				else if( !empty( $engine['loadPath'] ) ){
-					$path	= $engine['loadPath'];
-					$ext	= empty( $engine['loadExtension'] ) ? 'php' : $engine['loadExtension'];
-					$prefix	= empty( $engine['loadPrefix'] ) ? NULL : $engine['loadPrefix'];
-					CMC_Loader::registerNew( $ext, $prefix, $path );
-				}
-				$this->engines['active']	= 2;
-				break;
-			case 2:
-				break;
+		if( empty( $this->engines[$type] ) ){														//  not engine for engine type
+			throw new OutOfRangeException( 'Unknown engine "'.$type.'"' );							//  quit with exception
 		}
+		$engine	= (object) $this->engines[$type];													//  extract engine from engine map
+		if( (int) $engine->active === 0 ){															//  engine is disabled
+			throw new RuntimeException( 'Engine "'.$type.'" not enabled' );							//  quit with exception
+		}
+		if( !empty( $engine->loadPath ) ){															//  autoloader path is set
+			$ext	= empty( $engine->loadExtension ) ? 'php' : $engine->loadExtension;				//  figure class extensions
+			$prefix	= empty( $engine->loadPrefix ) ? NULL : $engine->loadPrefix;					//  figure class prefix
+			CMC_Loader::registerNew( $ext, $prefix, $engine->loadPath );							//  enable class autoloading
+		}
+		if( !empty( $engine->loadFile ) ){															//  single load file is set
+			require_once $engine->loadFile;															//  try to load single load file
+		}
+		$this->engines[$type]->active	= 2;														//  mark this engine as loaded
 	}
 
 	/**
