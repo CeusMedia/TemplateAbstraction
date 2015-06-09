@@ -1,23 +1,24 @@
 <?php
 /**
  *	Adapter for using PHP as template engine.
- *	@category		cmModules
- *	@package		TEA.Adapter
+ *	@category		Library
+ *	@package		CeusMedia_TemplateAbstraction_Adapter
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@since			0.3.0
- *	@version		$Id$
+ *	@copyright		2010-2015 Christian Würker
+ *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
+ *	@link			https://github.com/CeusMedia/TemplateAbstraction
  */
 /**
  *	Adapter for using PHP as template engine.
  *	Attention: You need to escape displayed contents by yourself!
- *	@category		cmModules
- *	@package		TEA.Adapter
- *	@extends		Template_Adapter_Abstract
+ *	@category		Library
+ *	@package		CeusMedia_TemplateAbstraction_Adapter
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@since			0.3.0
- *	@version		$Id$
+ *	@copyright		2010-2015 Christian Würker
+ *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
+ *	@link			https://github.com/CeusMedia/TemplateAbstraction
  */
-class CMM_TEA_Adapter_PHP extends CMM_TEA_Adapter_Abstract {
+class PHP extends \CeusMedia\TemplateAbstraction\AdapterAbstract {
 
 	/**
 	 *	Returns rendered template content.
@@ -35,7 +36,7 @@ class CMM_TEA_Adapter_PHP extends CMM_TEA_Adapter_Abstract {
 			if( is_string( $content ) )
 				$content	= $buffer;
 			else
-				throw new RuntimeException( $buffer );
+				throw new \RuntimeException( $buffer );
 		}
 		$content	= $this->removeTypeIdentifier( $content );
 		return $content;

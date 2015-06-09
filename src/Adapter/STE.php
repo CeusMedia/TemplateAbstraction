@@ -1,20 +1,23 @@
 <?php
 /**
  *	Adapter for cmModules template engine "STE".
- *	@category		cmModules
- *	@package		TEA.Adapter
+ *	@category		Library
+ *	@package		CeusMedia_TemplateAbstraction_Adapter
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@version		$Id$
+ *	@copyright		2010-2015 Christian Würker
+ *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
+ *	@link			https://github.com/CeusMedia/TemplateAbstraction
  */
 /**
  *	Adapter for cmModules template engine "STE".
- *	@category		cmModules
- *	@package		TEA.Adapter
- *	@extends		Template_Adapter_Abstract
+ *	@category		Library
+ *	@package		CeusMedia_TemplateAbstraction_Adapter
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@version		$Id$
+ *	@copyright		2010-2015 Christian Würker
+ *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
+ *	@link			https://github.com/CeusMedia/TemplateAbstraction
  */
-class CMM_TEA_Adapter_STE extends CMM_TEA_Adapter_Abstract {
+class STE extends \CeusMedia\TemplateAbstraction\AdapterAbstract {
 
 	/**
 	 *	Returns rendered template content.
@@ -22,8 +25,8 @@ class CMM_TEA_Adapter_STE extends CMM_TEA_Adapter_Abstract {
 	 *	@return		string
 	 */
 	public function render(){
-		CMM_STE_Template::setTemplatePath( $this->pathSource );
-		$template	= new CMM_STE_Template();
+		\CeusMedia\TemplateEngine\Template::setTemplatePath( $this->pathSource );
+		$template	= new \CeusMedia\TemplateEngine\Template();
 		$template->setTemplate( $this->fileSource );
 		$template->add( $this->data );
 		$content	= $template->create();

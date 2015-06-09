@@ -1,20 +1,23 @@
 <?php
 /**
  *	Adapter for Twig template engine.
- *	@category		cmModules
- *	@package		TEA.Adapter
+ *	@category		Library
+ *	@package		CeusMedia_TemplateAbstraction_Adapter
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@version		$Id$
+ *	@copyright		2010-2015 Christian Würker
+ *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
+ *	@link			https://github.com/CeusMedia/TemplateAbstraction
  */
 /**
  *	Adapter for Twig template engine.
- *	@category		cmModules
- *	@package		TEA.Adapter
- *	@extends		CMM_TEA_Adapter_Abstract
+ *	@category		Library
+ *	@package		CeusMedia_TemplateAbstraction_Adapter
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@version		$Id$
+ *	@copyright		2010-2015 Christian Würker
+ *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
+ *	@link			https://github.com/CeusMedia/TemplateAbstraction
  */
-class CMM_TEA_Adapter_Twig extends CMM_TEA_Adapter_Abstract {
+class Twig extends \CeusMedia\TemplateAbstraction\AdapterAbstract {
 
 	protected $template	= NULL;
 
@@ -30,16 +33,16 @@ class CMM_TEA_Adapter_Twig extends CMM_TEA_Adapter_Abstract {
 	}
 
 	public function setSourceFile( $fileName ){
-		$loader = new Twig_Loader_Filesystem( $this->pathSource );
-		$env = new Twig_Environment($loader, array(
+		$loader = new \Twig_Loader_Filesystem( $this->pathSource );
+		$env = new \Twig_Environment($loader, array(
 		  'cache' => $this->pathCache,
 		));
 		$this->template = $env->loadTemplate( $fileName );
 	}
 
 	public function setSourceString( $string ){
-		$loader = new Twig_Loader_String();
-		$env = new Twig_Environment($loader, array(
+		$loader = new \Twig_Loader_String();
+		$env = new \Twig_Environment($loader, array(
 		  'cache' => $this->pathCache,
 		));
 		$this->template = $env->loadTemplate( $string );

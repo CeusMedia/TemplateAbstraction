@@ -1,20 +1,23 @@
 <?php
 /**
  *	Abstract basic adapter implementation.
- *	@category		cmModules
- *	@package		TEA.Adapter
+ *	@category		Library
+ *	@package		CeusMedia_TemplateAbstraction
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@version		$Id$
+ *	@copyright		2010-2015 Christian Würker
+ *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
+ *	@link			https://github.com/CeusMedia/TemplateAbstraction
  */
 /**
  *	Abstract basic adapter implementation.
- *	@category		cmModules
- *	@package		TEA.Adapter
- *	@implements		CMM_TEA_Adapter_Interface
+ *	@category		Library
+ *	@package		CeusMedia_TemplateAbstraction
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@version		$Id$
+ *	@copyright		2010-2015 Christian Würker
+ *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
+ *	@link			https://github.com/CeusMedia/TemplateAbstraction
  */
-abstract class CMM_TEA_Adapter_Abstract implements CMM_TEA_Adapter_Interface {
+abstract class Abstract implements \CeusMedia\TemplateAbstraction\AdapterInterface {
 
 	protected $data			= array();
 	protected $factory		= NULL;
@@ -30,7 +33,7 @@ abstract class CMM_TEA_Adapter_Abstract implements CMM_TEA_Adapter_Interface {
 	 *	@param		CMM_TEA_Factory		$factory		TEA factory instance
 	 *	@return		void
 	 */
-	public function __construct( CMM_TEA_Factory $factory ){
+	public function __construct( \CeusMedia\TemplateAbstraction\Factory $factory ){
 		$this->factory	= $factory;
 	}
 

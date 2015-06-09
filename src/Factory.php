@@ -1,19 +1,23 @@
 <?php
 /**
  *	Factory for template from several template engines.
- *	@category	cmModules
- *	@package	TEA
- *	@author		Christian Würker <christian.wuerker@ceusmedia.de>
- *	@version	$Id$
+ *	@category		Library
+ *	@package		CeusMedia_TemplateAbstraction
+ *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
+ *	@copyright		2010-2015 Christian Würker
+ *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
+ *	@link			https://github.com/CeusMedia/TemplateAbstraction
  */
 /**
  *	Factory for template from several template engines.
- *	@category	cmModules
- *	@package	TEA
- *	@author		Christian Würker <christian.wuerker@ceusmedia.de>
- *	@version	$Id$
+ *	@category		Library
+ *	@package		CeusMedia_TemplateAbstraction
+ *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
+ *	@copyright		2010-2015 Christian Würker
+ *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
+ *	@link			https://github.com/CeusMedia/TemplateAbstraction
  */
-class CMM_TEA_Factory{
+class Factory{
 
 	protected $defaultType		= 'STE';
 	protected $engines			= array();
@@ -35,7 +39,7 @@ class CMM_TEA_Factory{
 		else{
 			$fileName		= $config ? $config : dirname( __FILE__ ).'/engines.ini';
 			if( !file_exists( $fileName ) )
-				throw new RuntimeException( 'Config file "'.$fileName.'" is missing' );
+				throw new \RuntimeException( 'Config file "'.$fileName.'" is missing' );
 			$this->engines	= parse_ini_file( $fileName, TRUE );
 		}
 		if( !array_key_exists( $this->defaultType, $this->engines ) ){
@@ -57,7 +61,7 @@ class CMM_TEA_Factory{
 	 *	@return		string|NULL
 	 */
 	protected function identifyType( $fileName ){
-		$content	= File_Reader::load( $this->pathTemplates.$fileName );
+		$content	= \FS_File_Reader::load( $this->pathTemplates.$fileName );
 		$matches	= array();
 		if( preg_match_all( $this->patternType, $content, $matches ) )
 			return $matches[1][0];
@@ -66,10 +70,10 @@ class CMM_TEA_Factory{
 
 	public function getEngineSettings( $type ){
 		if( !array_key_exists( $type, $this->engines ) )
-			throw new DomainException( 'Unknown engine "'.$type.'"' );
+			throw new \DomainException( 'Unknown engine "'.$type.'"' );
 		return $this->engines[$type];
 	}
-	
+
 	/**
 	 *	Loads a template after identifying its engine type.
 	 *	If the engine type is known use newTemplate to avoid engine type detection.
@@ -83,14 +87,14 @@ class CMM_TEA_Factory{
 		$type	= $this->identifyType( $fileName );
 		$type	= $type ? $type : $this->defaultType;
 		if( !$type )
-			throw new RuntimeException( 'No engine identified or set' );
+			throw new \RuntimeException( 'No engine identified or set' );
 		return $this->newTemplate( $type, $fileName, $data );
 	}
 
 	public function hasEngine( $type ){
 		return array_key_exists( $type, $this->engines );
 	}
-	
+
 	/**
 	 *	Checks engine settings.
 	 *	Tries to load engine from file or registers an autoloader for a path.
@@ -103,16 +107,16 @@ class CMM_TEA_Factory{
 	 */
 	protected function initializeEngine( $type ){
 		if( empty( $this->engines[$type] ) ){														//  not engine for engine type
-			throw new OutOfRangeException( 'Unknown engine "'.$type.'"' );							//  quit with exception
+			throw new \OutOfRangeException( 'Unknown engine "'.$type.'"' );							//  quit with exception
 		}
 		$engine	= (object) $this->engines[$type];													//  extract engine from engine map
 		if( (int) $engine->active === 0 ){															//  engine is disabled
-			throw new RuntimeException( 'Engine "'.$type.'" not enabled' );							//  quit with exception
+			throw new \RuntimeException( 'Engine "'.$type.'" not enabled' );							//  quit with exception
 		}
 		if( !empty( $engine->loadPath ) ){															//  autoloader path is set
 			$ext	= empty( $engine->loadExtension ) ? 'php' : $engine->loadExtension;				//  figure class extensions
 			$prefix	= empty( $engine->loadPrefix ) ? NULL : $engine->loadPrefix;					//  figure class prefix
-			CMC_Loader::registerNew( $ext, $prefix, $engine->loadPath );							//  enable class autoloading
+			\CMC_Loader::registerNew( $ext, $prefix, $engine->loadPath );							//  enable class autoloading
 		}
 		if( !empty( $engine->loadFile ) ){															//  single load file is set
 			require_once $engine->loadFile;															//  try to load single load file
@@ -130,8 +134,8 @@ class CMM_TEA_Factory{
 	 */
 	public function newTemplate( $type, $fileName = NULL, $data = NULL ){
 		$this->initializeEngine( $type );
-		$className	= 'CMM_TEA_Adapter_'.$type;
-		$reflection	= new ReflectionClass( $className );
+		$className	= '\\CeusMedia\\TemplateAbstraction\\Adapter\\'.$type;
+		$reflection	= new \ReflectionClass( $className );
 		$template	= $reflection->newInstanceArgs( array( $this ) );
 		$template->setSourcePath( $this->pathTemplates );
 		if( $this->pathCache )
@@ -173,7 +177,7 @@ class CMM_TEA_Factory{
 	 */
 	public function setDefaultType( $type ){
 		if( !array_key_exists( $type, $this->engines ) )
-			throw new RuntimeException( 'Engine "'.$type.'" is not available' );
+			throw new \RuntimeException( 'Engine "'.$type.'" is not available' );
 		$this->defaultType	= $type;
 	}
 

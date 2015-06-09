@@ -1,20 +1,23 @@
 <?php
 /**
  *	Adapter for cmClasses template engine.
- *	@category		cmModules
- *	@package		TEA.Adapter
+ *	@category		Library
+ *	@package		CeusMedia_TemplateAbstraction_Adapter
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@version		$Id$
+ *	@copyright		2010-2015 Christian Würker
+ *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
+ *	@link			https://github.com/CeusMedia/TemplateAbstraction
  */
 /**
  *	Adapter for cmClasses template engine.
- *	@category		cmModules
- *	@package		TEA.Adapter
- *	@extends		Template_Adapter_Abstract
+ *	@category		Library
+ *	@package		CeusMedia_TemplateAbstraction_Adapter
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@version		$Id$
+ *	@copyright		2010-2015 Christian Würker
+ *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
+ *	@link			https://github.com/CeusMedia/TemplateAbstraction
  */
-class CMM_TEA_Adapter_CMC extends CMM_TEA_Adapter_Abstract {
+class CMC extends \CeusMedia\TemplateAbstraction\AdapterAbstract {
 
 	/**
 	 *	Returns rendered template content.
@@ -23,7 +26,7 @@ class CMM_TEA_Adapter_CMC extends CMM_TEA_Adapter_Abstract {
 	 */
 	public function render(){
 		$pathName	= $this->pathSource.$this->fileSource;
-		$content	= UI_Template::render( $pathName, $this->data );
+		$content	= \UI_Template::render( $pathName, $this->data );
 		$content	= $this->removeTypeIdentifier( $content );
 		return $content;
 	}

@@ -1,19 +1,23 @@
 <?php
 /**
  *	Interface for each template engine in factory.
- *	@category		cmModules
- *	@package		TEA.Adapter
+ *	@category		Library
+ *	@package		CeusMedia_TemplateAbstraction
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@version		$Id$
+ *	@copyright		2010-2015 Christian Würker
+ *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
+ *	@link			https://github.com/CeusMedia/TemplateAbstraction
  */
 /**
  *	Interface for each template engine in factory.
- *	@category		cmModules
- *	@package		TEA.Adapter
+ *	@category		Library
+ *	@package		CeusMedia_TemplateAbstraction
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@version		$Id$
+ *	@copyright		2010-2015 Christian Würker
+ *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
+ *	@link			https://github.com/CeusMedia/TemplateAbstraction
  */
-interface CMM_TEA_Adapter_Interface {
+interface AdapterInterface {
 
 	/**
 	 *	Constructor.
@@ -21,7 +25,7 @@ interface CMM_TEA_Adapter_Interface {
 	 *	@param		CMM_TEA_Factory		$factory		TEA factory instance
 	 *	@return		void
 	 */
-	public function __construct( CMM_TEA_Factory $factory );
+	public function __construct( \CeusMedia\TemplateAbstraction\Factory $factory );
 
 	/**
 	 *	Assigns context data for template.
