@@ -26,7 +26,7 @@ class Mustache extends \CeusMedia\TemplateAbstraction\AdapterAbstract {
 	 *	@return		string
 	 */
 	public function render(){
-		$settings	= (object) $this->factory->getEngineSettings( 'Mustache' );
+//		$settings	= (object) $this->factory->getEngineSettings( 'Mustache' );
 		$options	= array(
 			'extension'	=> empty( $settings->extension ) ? 'html' : $settings->extension
 		);
@@ -34,7 +34,9 @@ class Mustache extends \CeusMedia\TemplateAbstraction\AdapterAbstract {
 		$loader		= new \Mustache_Loader_FilesystemLoader( $this->pathSource, $options );
 		$engine->setLoader( $loader );
 		$template	= $engine->loadTemplate( $this->fileSource );
-		return $template->render( $this->data );
+		$content	= $template->render( $this->data );
+		$content	= $this->removeTypeIdentifier( $content );
+		return $content;
 	}
 }
 ?>

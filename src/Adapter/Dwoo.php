@@ -28,7 +28,7 @@ class Dwoo extends \CeusMedia\TemplateAbstraction\AdapterAbstract {
 	public function render(){
 		if( !$this->fileSource )
 			throw new \RuntimeException( 'No source file set' );
-		$template	= new \Dwoo();
+		$template	= new \Dwoo\Core();
 		$template->setCacheDir( $this->pathCache );
 		$template->setCompileDir( $this->pathCompile );
 		$content	= $template->get( $this->pathSource.$this->fileSource, $this->data );

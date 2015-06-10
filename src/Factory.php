@@ -8,6 +8,7 @@
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
  *	@link			https://github.com/CeusMedia/TemplateAbstraction
  */
+namespace CeusMedia\TemplateAbstraction;
 /**
  *	Factory for template from several template engines.
  *	@category		Library
@@ -24,7 +25,7 @@ class Factory{
 	protected $pathTemplates	= 'templates/';
 	protected $pathCache		= 'templates/cache/';
 	protected $pathCompile		= 'templates/compiled/';
-	public $patternType			= '/^<!--TEA:(\S+)-->\n?\r?/';
+	public $patternType			= '/^<!--Engine:(\S+)-->\n?\r?/';
 
 	/**
 	 *	Constructor.
@@ -34,6 +35,7 @@ class Factory{
 	 *	@return		void
 	 */
 	public function __construct( $config = NULL ){
+		/*
 		if( is_array( $config ) )
 			$this->engines	= $config;
 		else{
@@ -50,17 +52,17 @@ class Factory{
 					break;
 				}
 			}
-		}
+		}*/
 	}
 
 	/**
 	 *	Tries to identify engine type by looking for a specific header pattern within a template.
 	 *	Returns every found type even if not supported.
-	 *	@access		protected
+	 *	@access		public
 	 *	@param		string		$fileName		File name of template within template path
 	 *	@return		string|NULL
 	 */
-	protected function identifyType( $fileName ){
+	public function identifyType( $fileName ){
 		$content	= \FS_File_Reader::load( $this->pathTemplates.$fileName );
 		$matches	= array();
 		if( preg_match_all( $this->patternType, $content, $matches ) )
@@ -68,11 +70,11 @@ class Factory{
 		return NULL;
 	}
 
-	public function getEngineSettings( $type ){
+/*	public function getEngineSettings( $type ){
 		if( !array_key_exists( $type, $this->engines ) )
 			throw new \DomainException( 'Unknown engine "'.$type.'"' );
 		return $this->engines[$type];
-	}
+	}*/
 
 	/**
 	 *	Loads a template after identifying its engine type.
@@ -106,7 +108,7 @@ class Factory{
 	 *	@throws		RuntimeException	if engine is not enabled
 	 */
 	protected function initializeEngine( $type ){
-		if( empty( $this->engines[$type] ) ){														//  not engine for engine type
+/*		if( empty( $this->engines[$type] ) ){														//  not engine for engine type
 			throw new \OutOfRangeException( 'Unknown engine "'.$type.'"' );							//  quit with exception
 		}
 		$engine	= (object) $this->engines[$type];													//  extract engine from engine map
@@ -121,7 +123,7 @@ class Factory{
 		if( !empty( $engine->loadFile ) ){															//  single load file is set
 			require_once $engine->loadFile;															//  try to load single load file
 		}
-		$this->engines[$type]->active	= 2;														//  mark this engine as loaded
+		$this->engines[$type]->active	= 2;*/														//  mark this engine as loaded
 	}
 
 	/**

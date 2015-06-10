@@ -8,6 +8,7 @@
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
  *	@link			https://github.com/CeusMedia/TemplateAbstraction
  */
+namespace CeusMedia\TemplateAbstraction;
 /**
  *	Abstract basic adapter implementation.
  *	@category		Library
@@ -17,7 +18,7 @@
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
  *	@link			https://github.com/CeusMedia/TemplateAbstraction
  */
-abstract class Abstract implements \CeusMedia\TemplateAbstraction\AdapterInterface {
+abstract class AdapterAbstract implements \CeusMedia\TemplateAbstraction\AdapterInterface {
 
 	protected $data			= array();
 	protected $factory		= NULL;
