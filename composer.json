@@ -18,7 +18,12 @@
   },
   "require": {
     "php": ">=5.3.0",
-    "ceus-media/common": ">=0.8.1"
+    "ceus-media/common": ">=0.8.1",
+    "ceus-media/template-engine": "dev-master",
+    "phptal/phptal": "dev-master",
+    "mustache/mustache": "2.8.0",
+    "dwoo/dwoo": "2.0b1",
+    "twig/twig": "1.18.2"
   },
   "autoload": {
     "psr-4": {
