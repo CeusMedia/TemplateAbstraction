@@ -8,6 +8,7 @@
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
  *	@link			https://github.com/CeusMedia/TemplateAbstraction
  */
+namespace CeusMedia\TemplateAbstraction\Adapter;
 /**
  *	Adapter for cmModules template engine "STE".
  *	@category		Library
@@ -29,7 +30,7 @@ class STE extends \CeusMedia\TemplateAbstraction\AdapterAbstract {
 		$template	= new \CeusMedia\TemplateEngine\Template();
 		$template->setTemplate( $this->fileSource );
 		$template->add( $this->data );
-		$content	= $template->create();
+		$content	= $template->render();
 		$content	= $this->removeTypeIdentifier( $content );
 		return $content;
 	}
