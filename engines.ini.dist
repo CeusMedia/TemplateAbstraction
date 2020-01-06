@@ -34,3 +34,6 @@ extension		= "html"
 loadExtension	= "php"
 loadPath		= "/var/www/lib/mustache.php/src/Mustache/";
 loadPrefix		= "Mustache_";
+
+[Latte]
+active			= 1

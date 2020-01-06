@@ -1,6 +1,6 @@
 <?php
 /**
- *	Adapter for PHPTAL template engine.
+ *	Adapter for Latte template engine.
  *	@category		Library
  *	@package		CeusMedia_TemplateAbstraction_Adapter
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
@@ -13,7 +13,7 @@ namespace CeusMedia\TemplateAbstraction\Adapter;
 use CeusMedia\TemplateAbstraction\AdapterAbstract;
 
 /**
- *	Adapter for PHPTAL template engine.
+ *	Adapter for Mustache template engine.
  *	@category		Library
  *	@package		CeusMedia_TemplateAbstraction_Adapter
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
@@ -21,7 +21,7 @@ use CeusMedia\TemplateAbstraction\AdapterAbstract;
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
  *	@link			https://github.com/CeusMedia/TemplateAbstraction
  */
-class PHPTAL extends AdapterAbstract
+class Latte extends AdapterAbstract
 {
 	/**
 	 *	Returns rendered template content.
@@ -30,14 +30,10 @@ class PHPTAL extends AdapterAbstract
 	 */
 	public function render(): string
 	{
-		if( !$this->fileSource )
-			throw new \RuntimeException( 'No source file set' );
-		$template	= new \PHPTAL();
-		foreach( $this->data as $key => $value )
-			$template->set( $key, $value );
-		$template->setTemplate( $this->pathSource.$this->fileSource );
-		$content	= $template->execute();
+		$latte		= new \Latte\Engine;
+		$latte->setTempDirectory( $this->pathCache );
+		$content	= $latte->renderToString( $this->pathSource.$this->fileSource, $this->data );
 		$content	= $this->removeTypeIdentifier( $content );
-		return $content;
+		return $this->pathSource.$this->fileSource;
 	}
 }

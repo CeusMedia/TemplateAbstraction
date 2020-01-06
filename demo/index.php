@@ -1,8 +1,9 @@
 <?php
 (@include '../vendor/autoload.php') or die('Please use composer to install required packages.');
 
-ob_start();
+//ob_start();
 try{
+	/*
 	print '<h3>PHP code</h3>
 <pre>
 $dataUser = (object) array(
@@ -21,7 +22,7 @@ $template->addData("engine", $factory->identifyType("template.tmpl"));
 
 print $template->render();
 </pre>';
-
+*/
 	$dataUser	= (object) array('name' => (object) array( 'first' => 'John', 'last' => 'Doe'));
 
 	$factory	= new \CeusMedia\TemplateAbstraction\Factory();
@@ -32,6 +33,7 @@ print $template->render();
 		'Mustache'			=> 'hello.mustache.html',
 		'Twig'				=> 'hello.twig.html',
 		'PHPTAL'			=> 'hello.phptal.html',
+//		'Latte'				=> 'hello.latte.html',
 	);
 
 	foreach( $files as $engine => $file ){
@@ -80,8 +82,8 @@ $body = '
 </div>';
 
 $page	= new UI_HTML_PageFrame();
-$page->addStylesheet("http://cdn.int1a.net/css/bootstrap.min.css");
-$page->addJavaScript("http://cdn.int1a.net/js/jquery/1.10.2.min.js");
-$page->addJavaScript("http://cdn.int1a.net/js/bootstrap.min.js");
+$page->addStylesheet('https://cdn.ceusmedia.de/css/bootstrap.min.css');
+$page->addJavaScript('https://cdn.ceusmedia.de/js/jquery/1.10.2.min.js');
+$page->addJavaScript('https://cdn.ceusmedia.de/js/bootstrap.min.js');
 $page->addBody($body);
 print $page->build();

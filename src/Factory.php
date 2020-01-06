@@ -4,17 +4,20 @@
  *	@category		Library
  *	@package		CeusMedia_TemplateAbstraction
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@copyright		2010-2015 Christian Würker
+ *	@copyright		2010-2020 Christian Würker
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
  *	@link			https://github.com/CeusMedia/TemplateAbstraction
  */
 namespace CeusMedia\TemplateAbstraction;
+
+use AdapterInterface;
+
 /**
  *	Factory for template from several template engines.
  *	@category		Library
  *	@package		CeusMedia_TemplateAbstraction
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@copyright		2010-2015 Christian Würker
+ *	@copyright		2010-2020 Christian Würker
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
  *	@link			https://github.com/CeusMedia/TemplateAbstraction
  */
@@ -34,7 +37,8 @@ class Factory{
 	 *	@param		string|array	$config		Filename of config file OR configuration as array
 	 *	@return		void
 	 */
-	public function __construct( $config = NULL ){
+	public function __construct( $config = NULL )
+	{
 		/*
 		if( is_array( $config ) )
 			$this->engines	= $config;
@@ -62,7 +66,8 @@ class Factory{
 	 *	@param		string		$fileName		File name of template within template path
 	 *	@return		string|NULL
 	 */
-	public function identifyType( $fileName ){
+	public function identifyType( $fileName )
+	{
 		$content	= \FS_File_Reader::load( $this->pathTemplates.$fileName );
 		$matches	= array();
 		if( preg_match_all( $this->patternType, $content, $matches ) )
@@ -82,10 +87,11 @@ class Factory{
 	 *	@access		public
 	 *	@param		string		$fileName		File name of template within set template path
 	 *	@param		array		$data			Map of template pairs
-	 *	@return		CMM_TEA_Adapter_Abstract
+	 *	@return		AdapterAbstract
 	 *	@throws		RuntimeException	if no engine type could be identified
 	 */
-	public function getTemplate( $fileName, $data = NULL ){
+	public function getTemplate( string $fileName, array $data = NULL ): AdapterAbstract
+	{
 		$type	= $this->identifyType( $fileName );
 		$type	= $type ? $type : $this->defaultType;
 		if( !$type )
@@ -93,7 +99,8 @@ class Factory{
 		return $this->newTemplate( $type, $fileName, $data );
 	}
 
-	public function hasEngine( $type ){
+	public function hasEngine( string $type ): bool
+	{
 		return array_key_exists( $type, $this->engines );
 	}
 
@@ -107,13 +114,14 @@ class Factory{
 	 *	@throws		RuntimeException	if engine type is unknown
 	 *	@throws		RuntimeException	if engine is not enabled
 	 */
-	protected function initializeEngine( $type ){
-/*		if( empty( $this->engines[$type] ) ){														//  not engine for engine type
+	protected function initializeEngine( string $type ): self
+	{/*
+		if( empty( $this->engines[$type] ) ){														//  not engine for engine type
 			throw new \OutOfRangeException( 'Unknown engine "'.$type.'"' );							//  quit with exception
 		}
 		$engine	= (object) $this->engines[$type];													//  extract engine from engine map
 		if( (int) $engine->active === 0 ){															//  engine is disabled
-			throw new \RuntimeException( 'Engine "'.$type.'" not enabled' );							//  quit with exception
+			throw new \RuntimeException( 'Engine "'.$type.'" not enabled' );						//  quit with exception
 		}
 		if( !empty( $engine->loadPath ) ){															//  autoloader path is set
 			$ext	= empty( $engine->loadExtension ) ? 'php' : $engine->loadExtension;				//  figure class extensions
@@ -124,6 +132,7 @@ class Factory{
 			require_once $engine->loadFile;															//  try to load single load file
 		}
 		$this->engines[$type]->active	= 2;*/														//  mark this engine as loaded
+		return $this;
 	}
 
 	/**
@@ -132,9 +141,10 @@ class Factory{
 	 *	@param		string		$type			Engine type key, case sensitive, see engines.ini
 	 *	@param		string		$fileName		File name of template within set template path
 	 *	@param		array		$data			Map of template pairs
-	 *	@return		CMM_TEA_Adapter_Abstract
+	 *	@return		AdapterAbstract
 	 */
-	public function newTemplate( $type, $fileName = NULL, $data = NULL ){
+	public function newTemplate( string $type, string $fileName = NULL, array $data = NULL ): AdapterAbstract
+	{
 		$this->initializeEngine( $type );
 		$className	= '\\CeusMedia\\TemplateAbstraction\\Adapter\\'.$type;
 		$reflection	= new \ReflectionClass( $className );
@@ -157,8 +167,10 @@ class Factory{
 	 *	@param		string			$path			Path to cache folder
 	 *	@return		void
 	 */
-	public function setCachePath( $path ){
+	public function setCachePath( string $path ): self
+	{
 		$this->pathCache	= $path;
+		return $this;
 	}
 
 	/**
@@ -167,8 +179,10 @@ class Factory{
 	 *	@param		string			$path			Path to compile folder
 	 *	@return		void
 	 */
-	public function setCompilePath( $path ){
+	public function setCompilePath( string $path ): self
+	{
 		$this->pathCompile	= $path;
+		return $this;
 	}
 
 	/**
@@ -177,10 +191,12 @@ class Factory{
 	 *	@param		string			$type			Engine type to set as default
 	 *	@return		void
 	 */
-	public function setDefaultType( $type ){
+	public function setDefaultType( string $type ): self
+	{
 		if( !array_key_exists( $type, $this->engines ) )
 			throw new \RuntimeException( 'Engine "'.$type.'" is not available' );
 		$this->defaultType	= $type;
+		return $this;
 	}
 
 	/**
@@ -189,8 +205,9 @@ class Factory{
 	 *	@param		string			$path			Path to template folder
 	 *	@return		void
 	 */
-	public function setTemplatePath( $path ){
+	public function setTemplatePath( string $path ): self
+	{
 		$this->pathTemplates	= $path;
+		return $this;
 	}
 }
-?>
