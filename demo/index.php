@@ -1,7 +1,10 @@
 <?php
-(@include '../vendor/autoload.php') or die('Please use composer to install required packages.');
+( @include '../vendor/autoload.php' ) or die( 'Please use composer to install required packages.' );
 
-//ob_start();
+ini_set( 'display_errors', 'On' );
+error_reporting( E_ALL );
+ob_start();
+
 try{
 	/*
 	print '<h3>PHP code</h3>
@@ -23,25 +26,41 @@ $template->addData("engine", $factory->identifyType("template.tmpl"));
 print $template->render();
 </pre>';
 */
-	$dataUser	= (object) array('name' => (object) array( 'first' => 'John', 'last' => 'Doe'));
+	$dataUser	= (object) [
+		'name'	=> (object) [
+			'first'	=> 'John',
+			'last'	=> 'Doe',
+		]
+	];
 
 	$factory	= new \CeusMedia\TemplateAbstraction\Factory();
-	$factory->setTemplatePath("templates/");
+	$factory->setTemplatePath( 'templates/' );
 
-	$files	= array(
-		'TemplateEngine'	=> 'hello.ste.html',
-		'Mustache'			=> 'hello.mustache.html',
-		'Twig'				=> 'hello.twig.html',
-		'PHPTAL'			=> 'hello.phptal.html',
+	$files		= array(
+//		'CMC'				=> 'hello.cmc.html',
+//		'Dwoo'				=> 'hello.dwoo.html',
 //		'Latte'				=> 'hello.latte.html',
+		'Mustache'			=> 'hello.mustache.html',
+		'PHPTAL'			=> 'hello.phptal.html',
+		'Smarty'			=> 'hello.smarty.html',
+		'TemplateEngine'	=> 'hello.ste.html',
+		'Twig'				=> 'hello.twig.html',
 	);
 
-	foreach( $files as $engine => $file ){
-		$template	= $factory->getTemplate($file);
-		$template->addData('user', $dataUser);
-		$template->addData('engine', $factory->identifyType($file));
-		$key	= uniqid('engine-');
-		print '<h3>'.$engine.'</h3>
+	foreach( $files as $engineLabel => $file ){
+		$template	= $factory->getTemplate( $file );
+		$template->addData( 'user', $dataUser );
+		$template->addData( 'engine', $factory->identifyType( $file ) );
+		$key	= uniqid( 'engine-' );
+
+		try{
+			$content	= $template->render();
+		}
+		catch( \Exception $e ){
+			$content	= \UI_HTML_Exception_View::render( $e );
+		}
+
+		print '<h3>'.$engineLabel.'</h3>
 <div class="tabbable">
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="#'.$key.'-template" data-toggle="tab">Template Code</a></li>
@@ -50,13 +69,13 @@ print $template->render();
 	</ul>
 	<div class="tab-content">
 		<div class="tab-pane active" id="'.$key.'-template">
-			<pre>'.htmlentities(\FS_File_Reader::load('templates/'.$file)).'</pre>
+			<pre>'.htmlentities( \FS_File_Reader::load( 'templates/'.$file ) ).'</pre>
 		</div>
 		<div class="tab-pane" id="'.$key.'-source">
-			<pre>'.htmlentities($template->render()).'</pre>
+			<pre>'.htmlentities( $template->render() ).'</pre>
 		</div>
 		<div class="tab-pane" id="'.$key.'-output">
-			<pre>'.$template->render().'</pre>
+			<pre>'.$content.'</pre>
 		</div>
 	</div>
 </div>';
@@ -69,8 +88,8 @@ print $template->render();
 	print '<h3>Dwoo</h3><pre>'.$template->render().'</pre>';
 */
 }
-catch(Exception $e){
-	UI_HTML_Exception_Page::display($e);
+catch( Exception $e ){
+	UI_HTML_Exception_Page::display( $e );
 	exit;
 }
 
@@ -82,8 +101,8 @@ $body = '
 </div>';
 
 $page	= new UI_HTML_PageFrame();
-$page->addStylesheet('https://cdn.ceusmedia.de/css/bootstrap.min.css');
-$page->addJavaScript('https://cdn.ceusmedia.de/js/jquery/1.10.2.min.js');
-$page->addJavaScript('https://cdn.ceusmedia.de/js/bootstrap.min.js');
-$page->addBody($body);
+$page->addStylesheet( 'https://cdn.ceusmedia.de/css/bootstrap.min.css' );
+$page->addJavaScript( 'https://cdn.ceusmedia.de/js/jquery/1.10.2.min.js' );
+$page->addJavaScript( 'https://cdn.ceusmedia.de/js/bootstrap.min.js' );
+$page->addBody( $body );
 print $page->build();
