@@ -1,0 +1,52 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Instantiated class HamlParser not found\\.$#"
+			count: 1
+			path: src/Adapter/phpHaml.php
+
+		-
+			message: "#^Call to method append\\(\\) on an unknown class HamlParser\\.$#"
+			count: 1
+			path: src/Adapter/phpHaml.php
+
+		-
+			message: "#^Call to method fetch\\(\\) on an unknown class HamlParser\\.$#"
+			count: 1
+			path: src/Adapter/phpHaml.php
+
+		-
+			message: "#^Parameter \\#1 \\$objectOrClass of class ReflectionClass constructor expects class\\-string\\<T of object\\>\\|T of object, string given\\.$#"
+			count: 1
+			path: src/Factory.php
+
+		-
+			message: "#^Call to an undefined method object\\:\\:setSourcePath\\(\\)\\.$#"
+			count: 1
+			path: src/Factory.php
+
+		-
+			message: "#^Call to an undefined method object\\:\\:setCachePath\\(\\)\\.$#"
+			count: 1
+			path: src/Factory.php
+
+		-
+			message: "#^Call to an undefined method object\\:\\:setCompilePath\\(\\)\\.$#"
+			count: 1
+			path: src/Factory.php
+
+		-
+			message: "#^Call to an undefined method object\\:\\:setSourceFile\\(\\)\\.$#"
+			count: 1
+			path: src/Factory.php
+
+		-
+			message: "#^Call to an undefined method object\\:\\:setData\\(\\)\\.$#"
+			count: 1
+			path: src/Factory.php
+
+		-
+			message: "#^Method CeusMedia\\\\TemplateAbstraction\\\\Factory\\:\\:newTemplate\\(\\) should return CeusMedia\\\\TemplateAbstraction\\\\AdapterAbstract but returns object\\.$#"
+			count: 1
+			path: src/Factory.php
+
