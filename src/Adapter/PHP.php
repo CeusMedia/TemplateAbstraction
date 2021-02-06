@@ -28,20 +28,23 @@ class PHP extends AdapterAbstract
 	 *	Returns rendered template content.
 	 *	@access		public
 	 *	@return		string
+	 *	@throws		\RuntimeException		if no source file has been set
 	 */
 	public function render(): string
 	{
+		if( NULL === $this->fileSource )
+			throw new \RuntimeException( 'No source file set' );
 		extract( $this->data );
 		ob_start();
 		$result		= require( $this->pathSource.$this->fileSource );
 		$buffer		= ob_get_clean();
 		$content	= $result;
-		if( trim( $buffer ) )
+		if( strlen( trim( (string) $buffer ) ) > 0 )
 		{
 			if( is_string( $content ) )
 				$content	= $buffer;
 			else
-				throw new \RuntimeException( $buffer );
+				throw new \RuntimeException( (string) $buffer );
 		}
 		$content	= $this->removeTypeIdentifier( $content );
 		return $content;

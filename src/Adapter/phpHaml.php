@@ -27,10 +27,11 @@ class phpHaml extends AdapterAbstract
 	 *	Returns rendered template content.
 	 *	@access		public
 	 *	@return		string
+	 *	@throws		\RuntimeException		if no source file has been set
 	 */
 	public function render(): string
 	{
-		if( !$this->fileSource )
+		if( NULL === $this->fileSource )
 			throw new \RuntimeException( 'No source file set' );
 		$engine	= new \HamlParser( $this->pathSource, $this->pathCache );
 		$engine->append( $this->data );

@@ -27,14 +27,15 @@ class Smarty extends AdapterAbstract
 	 *	Returns rendered template content.
 	 *	@access		public
 	 *	@return		string
+	 *	@throws		\RuntimeException		if no source file has been set
 	 */
 	public function render(): string
 	{
-		if( !$this->fileSource )
+		if( NULL === $this->fileSource )
 			throw new \RuntimeException( 'No source file set' );
 		$template	= new \Smarty();
-		$template->template_dir	= $this->pathSource;
-		$template->compile_dir	= $this->pathCache;
+		$template->setTemplateDir( $this->pathSource );
+		$template->setCompileDir( $this->pathCache );
 		foreach( $this->data as $key => $value )
 			$template->assign( $key, $value );
 		$content	= $template->fetch( $this->fileSource );

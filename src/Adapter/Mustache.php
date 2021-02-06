@@ -27,12 +27,15 @@ class Mustache extends AdapterAbstract
 	 *	Returns rendered template content.
 	 *	@access		public
 	 *	@return		string
+	 *	@throws		\RuntimeException		if no source file has been set
 	 */
 	public function render(): string
 	{
+		if( NULL === $this->fileSource )
+			throw new \RuntimeException( 'No source file set' );
 //		$settings	= (object) $this->factory->getEngineSettings( 'Mustache' );
 		$options	= array(
-			'extension'	=> empty( $settings->extension ) ? 'html' : $settings->extension
+			'extension'	=> /*isset( $settings->extension ) ? $settings->extension : */'html',
 		);
 		$engine		= new \Mustache_Engine;
 		$loader		= new \Mustache_Loader_FilesystemLoader( $this->pathSource, $options );

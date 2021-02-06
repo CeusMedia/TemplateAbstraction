@@ -23,15 +23,19 @@ use CeusMedia\TemplateAbstraction\AdapterAbstract;
  */
 class Twig extends AdapterAbstract
 {
+	/**	@var	\Twig_TemplateInterface|null	$template	Twig template instance, if a source has been set */
 	protected $template	= NULL;
 
 	/**
 	 *	Returns rendered template content.
 	 *	@access		public
 	 *	@return		string
+	 *	@throws		\RuntimeException		if no source has been set
 	 */
 	public function render(): string
 	{
+		if( is_null( $this->template ) )
+			throw new \RuntimeException( 'No source set' );
 		$content	= $this->template->render( $this->data );
 		$content	= $this->removeTypeIdentifier( $content );
 		return $content;

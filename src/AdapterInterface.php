@@ -21,7 +21,6 @@ namespace CeusMedia\TemplateAbstraction;
  */
 interface AdapterInterface
 {
-
 	/**
 	 *	Constructor.
 	 *	@access		public
