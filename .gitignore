@@ -1,4 +1,5 @@
 /vendor
 /composer.lock
 /engines.ini
-/demo/templates/cache/*
+/demo/templates/cache
+/demo/templates/compiled

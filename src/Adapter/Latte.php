@@ -34,6 +34,6 @@ class Latte extends AdapterAbstract
 		$latte->setTempDirectory( $this->pathCache );
 		$content	= $latte->renderToString( $this->pathSource.$this->fileSource, $this->data );
 		$content	= $this->removeTypeIdentifier( $content );
-		return $this->pathSource.$this->fileSource;
+		return $content;
 	}
 }

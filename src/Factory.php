@@ -4,31 +4,35 @@
  *	@category		Library
  *	@package		CeusMedia_TemplateAbstraction
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@copyright		2010-2020 Christian Würker
+ *	@copyright		2010-2021 Christian Würker
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
  *	@link			https://github.com/CeusMedia/TemplateAbstraction
  */
 namespace CeusMedia\TemplateAbstraction;
 
+use FS_File_Reader as FileReader;
 use AdapterInterface;
+use ReflectionClass;
+use RuntimeException;
 
 /**
  *	Factory for template from several template engines.
  *	@category		Library
  *	@package		CeusMedia_TemplateAbstraction
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@copyright		2010-2020 Christian Würker
+ *	@copyright		2010-2021  Christian Würker
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
  *	@link			https://github.com/CeusMedia/TemplateAbstraction
  */
-class Factory{
+class Factory
+{
+	public $patternType			= '/^<!--Engine:(\S+)-->\n?\r?/';
 
 	protected $defaultType		= 'STE';
 	protected $engines			= array();
 	protected $pathTemplates	= 'templates/';
 	protected $pathCache		= 'templates/cache/';
 	protected $pathCompile		= 'templates/compiled/';
-	public $patternType			= '/^<!--Engine:(\S+)-->\n?\r?/';
 
 	/**
 	 *	Constructor.
@@ -59,23 +63,8 @@ class Factory{
 		}*/
 	}
 
-	/**
-	 *	Tries to identify engine type by looking for a specific header pattern within a template.
-	 *	Returns every found type even if not supported.
-	 *	@access		public
-	 *	@param		string		$fileName		File name of template within template path
-	 *	@return		string|NULL
-	 */
-	public function identifyType( $fileName )
+/*	public function getEngineSettings( $type )
 	{
-		$content	= \FS_File_Reader::load( $this->pathTemplates.$fileName );
-		$matches	= array();
-		if( preg_match_all( $this->patternType, $content, $matches ) )
-			return $matches[1][0];
-		return NULL;
-	}
-
-/*	public function getEngineSettings( $type ){
 		if( !array_key_exists( $type, $this->engines ) )
 			throw new \DomainException( 'Unknown engine "'.$type.'"' );
 		return $this->engines[$type];
@@ -95,13 +84,112 @@ class Factory{
 		$type	= $this->identifyType( $fileName );
 		$type	= $type ? $type : $this->defaultType;
 		if( !$type )
-			throw new \RuntimeException( 'No engine identified or set' );
+			throw new RuntimeException( 'No engine identified or set' );
 		return $this->newTemplate( $type, $fileName, $data );
 	}
 
+	/**
+	 *	Indicates whether a template engine is available.
+	 *	@access		public
+	 *	@param		string		$type		Key of template engined to check
+	 *	@return		boolean
+	 */
 	public function hasEngine( string $type ): bool
 	{
 		return array_key_exists( $type, $this->engines );
+	}
+
+	/**
+	 *	Tries to identify engine type by looking for a specific header pattern within a template.
+	 *	Returns every found type even if not supported.
+	 *	@access		public
+	 *	@param		string		$fileName		File name of template within template path
+	 *	@return		string|NULL
+	 */
+	public function identifyType( string $fileName ): ?string
+	{
+		$content	= FileReader::load( $this->pathTemplates.$fileName );
+		$matches	= array();
+		if( preg_match_all( $this->patternType, $content, $matches ) )
+			return $matches[1][0];
+		return NULL;
+	}
+
+	/**
+	 *	Loads a template of a known engine type.
+	 *	@access		public
+	 *	@param		string		$type			Engine type key, case sensitive, see engines.ini
+	 *	@param		string		$fileName		File name of template within set template path
+	 *	@param		array		$data			Map of template pairs
+	 *	@return		AdapterAbstract
+	 */
+	public function newTemplate( string $type, string $fileName = NULL, array $data = NULL ): AdapterAbstract
+	{
+		$this->initializeEngine( $type );
+		$className	= '\\CeusMedia\\TemplateAbstraction\\Adapter\\'.$type;
+		$reflection	= new ReflectionClass( $className );
+		$template	= $reflection->newInstanceArgs( array( $this ) );
+		$template->setSourcePath( $this->pathTemplates );
+		if( $this->pathCache )
+			$template->setCachePath( $this->pathCache );
+		if( $this->pathCompile )
+			$template->setCompilePath( $this->pathCompile );
+		if( !empty( $fileName ) )
+			$template->setSourceFile( $fileName );
+		if( $data )
+			$template->setData( $data );
+		return $template;
+	}
+
+	/**
+	 *	Sets path to cache folder.
+	 *	@access		public
+	 *	@param		string			$path			Path to cache folder
+	 *	@return		self
+	 */
+	public function setCachePath( string $path ): self
+	{
+		$this->pathCache	= $path;
+		return $this;
+	}
+
+	/**
+	 *	Sets path to compile folder.
+	 *	@access		public
+	 *	@param		string			$path			Path to compile folder
+	 *	@return		self
+	 */
+	public function setCompilePath( string $path ): self
+	{
+		$this->pathCompile	= $path;
+		return $this;
+	}
+
+	/**
+	 *	Sets default template engine type.
+	 *	@access		public
+	 *	@param		string			$type			Engine type to set as default
+	 *	@return		self
+	 *	@throws		RuntimeException				if engine is not available
+	 */
+	public function setDefaultType( string $type ): self
+	{
+		if( !array_key_exists( $type, $this->engines ) )
+			throw new RuntimeException( 'Engine "'.$type.'" is not available' );
+		$this->defaultType	= $type;
+		return $this;
+	}
+
+	/**
+	 *	Sets path to template folder.
+	 *	@access		public
+	 *	@param		string			$path			Path to template folder
+	 *	@return		self
+	 */
+	public function setTemplatePath( string $path ): self
+	{
+		$this->pathTemplates	= $path;
+		return $this;
 	}
 
 	/**
@@ -110,7 +198,7 @@ class Factory{
 	 *	Notes ready state of engine and skips on a second run.
 	 *	@access		protected
 	 *	@param		string		$type		Engine type key
-	 *	@return		void
+	 *	@return		self
 	 *	@throws		RuntimeException	if engine type is unknown
 	 *	@throws		RuntimeException	if engine is not enabled
 	 */
@@ -132,82 +220,6 @@ class Factory{
 			require_once $engine->loadFile;															//  try to load single load file
 		}
 		$this->engines[$type]->active	= 2;*/														//  mark this engine as loaded
-		return $this;
-	}
-
-	/**
-	 *	Loads a template of a known engine type.
-	 *	@access		public
-	 *	@param		string		$type			Engine type key, case sensitive, see engines.ini
-	 *	@param		string		$fileName		File name of template within set template path
-	 *	@param		array		$data			Map of template pairs
-	 *	@return		AdapterAbstract
-	 */
-	public function newTemplate( string $type, string $fileName = NULL, array $data = NULL ): AdapterAbstract
-	{
-		$this->initializeEngine( $type );
-		$className	= '\\CeusMedia\\TemplateAbstraction\\Adapter\\'.$type;
-		$reflection	= new \ReflectionClass( $className );
-		$template	= $reflection->newInstanceArgs( array( $this ) );
-		$template->setSourcePath( $this->pathTemplates );
-		if( $this->pathCache )
-			$template->setCachePath( $this->pathCache );
-		if( $this->pathCompile )
-			$template->setCompilePath( $this->pathCompile );
-		if( !empty( $fileName ) )
-			$template->setSourceFile( $fileName );
-		if( $data )
-			$template->setData( $data );
-		return $template;
-	}
-
-	/**
-	 *	Sets path to cache folder.
-	 *	@access		public
-	 *	@param		string			$path			Path to cache folder
-	 *	@return		void
-	 */
-	public function setCachePath( string $path ): self
-	{
-		$this->pathCache	= $path;
-		return $this;
-	}
-
-	/**
-	 *	Sets path to compile folder.
-	 *	@access		public
-	 *	@param		string			$path			Path to compile folder
-	 *	@return		void
-	 */
-	public function setCompilePath( string $path ): self
-	{
-		$this->pathCompile	= $path;
-		return $this;
-	}
-
-	/**
-	 *	Sets default template engine type.
-	 *	@access		public
-	 *	@param		string			$type			Engine type to set as default
-	 *	@return		void
-	 */
-	public function setDefaultType( string $type ): self
-	{
-		if( !array_key_exists( $type, $this->engines ) )
-			throw new \RuntimeException( 'Engine "'.$type.'" is not available' );
-		$this->defaultType	= $type;
-		return $this;
-	}
-
-	/**
-	 *	Sets path to template folder.
-	 *	@access		public
-	 *	@param		string			$path			Path to template folder
-	 *	@return		void
-	 */
-	public function setTemplatePath( string $path ): self
-	{
-		$this->pathTemplates	= $path;
 		return $this;
 	}
 }

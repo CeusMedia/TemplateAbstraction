@@ -1,7 +1,8 @@
-<!--TEA:phpHaml-->
+<!--Engine:phpHaml-->
 #test
   Hello
-  %span= $user->getName()->get( 'first' )
+  %span= $userArray['name']['first']
+  %span= $userObject->name->last
   !
   %br
   Engine:

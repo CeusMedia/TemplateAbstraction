@@ -4,7 +4,7 @@
  *	@category		Library
  *	@package		CeusMedia_TemplateAbstraction
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@copyright		2010-2020 Christian Würker
+ *	@copyright		2010-2021 Christian Würker
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
  *	@link			https://github.com/CeusMedia/TemplateAbstraction
  */
@@ -15,7 +15,7 @@ namespace CeusMedia\TemplateAbstraction;
  *	@category		Library
  *	@package		CeusMedia_TemplateAbstraction
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@copyright		2010-2020 Christian Würker
+ *	@copyright		2010-2021 Christian Würker
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
  *	@link			https://github.com/CeusMedia/TemplateAbstraction
  */
@@ -54,17 +54,6 @@ abstract class AdapterAbstract implements AdapterInterface
 			throw new \RuntimeException( 'Template data key "'.$key.'" is already defined' );
 		$this->data[$key]	= $value;
 		return $this;
-	}
-
-	/**
-	 *	Removes TEA type identifier in rendered template content.
-	 *	@access		protected
-	 *	@param		string			$content		Rendered template content
-	 *	@return		string			Rendered template content without type identifier
-	 */
-	protected function removeTypeIdentifier( string $content ): string
-	{
-		return preg_replace( $this->factory->patternType, '', $content );
 	}
 
 	/**
@@ -139,5 +128,16 @@ abstract class AdapterAbstract implements AdapterInterface
 	{
 		$this->template	= $string;
 		return $this;
+	}
+
+	/**
+	 *	Removes TEA type identifier in rendered template content.
+	 *	@access		protected
+	 *	@param		string			$content		Rendered template content
+	 *	@return		string			Rendered template content without type identifier
+	 */
+	protected function removeTypeIdentifier( string $content ): string
+	{
+		return preg_replace( $this->factory->patternType, '', $content );
 	}
 }
