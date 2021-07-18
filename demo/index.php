@@ -1,29 +1,13 @@
 <?php
-(@include '../vendor/autoload.php') or die('Please use composer to install required packages.');
+( @include '../vendor/autoload.php' ) or die( 'Please use composer to install required packages.' );
+
+ini_set( 'display_errors', 'On' );
+error_reporting( E_ALL );
+ob_start();
 new UI_DevOutput();
 
-$examples	= array();
+$examples	= [];
 try{
-	/*
-	print '<h3>PHP code</h3>
-<pre>
-$dataUser = (object) array(
-    "name" => (object) array(
-        "first" => "John",
-        "last"  => "Doe"
-    )
-);
-
-$factory	= new \CeusMedia\TemplateAbstraction\Factory();
-$factory->setTemplatePath("templates/");
-
-$template	= $factory->getTemplate("template.tmpl");
-$template->addData("user", $dataUser);
-$template->addData("engine", $factory->identifyType("template.tmpl"));
-
-print $template->render();
-</pre>';
-*/
 	$dataUserArray	= (array) array(
 		'name'	=> (array) array(
 			'first'	=> 'John',
@@ -59,7 +43,14 @@ print $template->render();
 		$template->addData('userObject', $dataUserObject);
 		$template->addData('engine', $factory->identifyType($file));
 		$key	= uniqid('engine-'.$engine);
+		try{
+			$content	= $template->render();
+		}
+		catch( \Exception $e ){
+			$content	= \UI_HTML_Exception_View::render( $e );
+		}
 		$examples[]	= '<h3>'.$engine.'</h3>
+
 <div class="tabbable">
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="#'.$key.'-template" data-toggle="tab">Template Code</a></li>
@@ -68,27 +59,20 @@ print $template->render();
 	</ul>
 	<div class="tab-content">
 		<div class="tab-pane active" id="'.$key.'-template">
-			<pre>'.htmlentities(\FS_File_Reader::load('templates/'.$file)).'</pre>
+			<pre>'.htmlentities( \FS_File_Reader::load( 'templates/'.$file ) ).'</pre>
 		</div>
 		<div class="tab-pane" id="'.$key.'-source">
-			<pre>'.htmlentities($template->render()).'</pre>
+			<pre>'.htmlentities( $content ).'</pre>
 		</div>
 		<div class="tab-pane" id="'.$key.'-output">
-			'.$template->render().'
+			'.$content.'
 		</div>
 	</div>
 </div>';
 	}
-
-/*	$template	= $factory->getTemplate("hello.dwoo.html");
-	$type		= $factory->identifyType("hello.dwoo.html");
-	$template->addData('user', $dataUser);
-	$template->addData('type', $type);
-	print '<h3>Dwoo</h3><pre>'.$template->render().'</pre>';
-*/
 }
 catch( Exception $e ){
-	UI_HTML_Exception_Page::display($e);
+	UI_HTML_Exception_Page::display( $e );
 	exit;
 }
 
@@ -100,8 +84,8 @@ $body = '
 </div>';
 
 $page	= new UI_HTML_PageFrame();
-$page->addStylesheet('https://cdn.ceusmedia.de/css/bootstrap.min.css');
-$page->addJavaScript('https://cdn.ceusmedia.de/js/jquery/1.10.2.min.js');
-$page->addJavaScript('https://cdn.ceusmedia.de/js/bootstrap.min.js');
-$page->addBody($body);
+$page->addStylesheet( 'https://cdn.ceusmedia.de/css/bootstrap.min.css' );
+$page->addJavaScript( 'https://cdn.ceusmedia.de/js/jquery/1.10.2.min.js' );
+$page->addJavaScript( 'https://cdn.ceusmedia.de/js/bootstrap.min.js' );
+$page->addBody( $body );
 print $page->build();

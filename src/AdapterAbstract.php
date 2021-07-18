@@ -21,12 +21,25 @@ namespace CeusMedia\TemplateAbstraction;
  */
 abstract class AdapterAbstract implements AdapterInterface
 {
+	/** @var	array			$data				... */
 	protected $data			= array();
-	protected $factory		= NULL;
+
+	/** @var	Factory		$factory			... */
+	protected $factory;
+
+	/** @var	string|null		$fileSource			... */
 	protected $fileSource	= NULL;
+
+	/** @var	string			$pathSource			... */
 	protected $pathSource	= '';
+
+	/** @var	string			$pathCache			... */
 	protected $pathCache	= '';
+
+	/** @var	string			$pathCompile		... */
 	protected $pathCompile	= '';
+
+	/** @var	string			$template			... */
 	protected $template		= '';
 
 	/**

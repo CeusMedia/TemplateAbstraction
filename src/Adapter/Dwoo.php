@@ -27,15 +27,19 @@ class Dwoo extends AdapterAbstract
 	 *	Returns rendered template content.
 	 *	@access		public
 	 *	@return		string
+	 *	@throws		\RuntimeException		if no source file has been set
+	 *	@throws		\RuntimeException		if Dwoo Core failed to render template
 	 */
 	public function render(): string
 	{
-		if( !$this->fileSource )
+		if( NULL === $this->fileSource )
 			throw new \RuntimeException( 'No source file set' );
 		$template	= new \Dwoo\Core();
 		$template->setCacheDir( $this->pathCache );
 		$template->setCompileDir( $this->pathCompile );
 		$content	= $template->get( $this->pathSource.$this->fileSource, $this->data );
+		if( !is_string( $content ) )
+			throw new \RuntimeException( 'Dwoo Core failed to render template' );
 		$content	= $this->removeTypeIdentifier( $content );
 		return $content;
 	}

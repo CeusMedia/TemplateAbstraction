@@ -26,22 +26,32 @@ use RuntimeException;
  */
 class Factory
 {
-	public $patternType			= '/^<!--Engine:(\S+)-->\n?\r?/';
+	/**	@param		string				$defaultType		... */
+	protected string $defaultType		= 'STE';
 
-	protected $defaultType		= 'STE';
-	protected $engines			= array();
-	protected $pathTemplates	= 'templates/';
-	protected $pathCache		= 'templates/cache/';
-	protected $pathCompile		= 'templates/compiled/';
+	/**	@param		array				$engines		... */
+	protected array $engines			= array();
+
+	/**	@param		string				$pathTemplates		... */
+	protected string $pathTemplates		= 'templates/';
+
+	/**	@param		string				$pathCache		... */
+	protected string $pathCache			= 'templates/cache/';
+
+	/**	@param		string				$pathCompile		... */
+	protected string $pathCompile		= 'templates/compiled/';
+
+	/**	@param		string				$patternType		... */
+	public string $patternType			= '/^<!--Engine:(\S+)-->\n?\r?/';
 
 	/**
 	 *	Constructor.
 	 *	Loads engine definitions from engine.ini.
 	 *	@access		public
-	 *	@param		string|array	$config		Filename of config file OR configuration as array
 	 *	@return		void
 	 */
-	public function __construct( $config = NULL )
+//	 *	@param		string|array	$config		Filename of config file OR configuration as array
+	public function __construct(/* $config = NULL */)
 	{
 		/*
 		if( is_array( $config ) )
@@ -77,7 +87,7 @@ class Factory
 	 *	@param		string		$fileName		File name of template within set template path
 	 *	@param		array		$data			Map of template pairs
 	 *	@return		AdapterAbstract
-	 *	@throws		RuntimeException	if no engine type could be identified
+	 *	@throws		\RuntimeException			if no engine type could be identified
 	 */
 	public function getTemplate( string $fileName, array $data = NULL ): AdapterAbstract
 	{
@@ -130,13 +140,13 @@ class Factory
 		$reflection	= new ReflectionClass( $className );
 		$template	= $reflection->newInstanceArgs( array( $this ) );
 		$template->setSourcePath( $this->pathTemplates );
-		if( $this->pathCache )
+		if( strlen( trim( $this->pathCache ) ) > 0 )
 			$template->setCachePath( $this->pathCache );
-		if( $this->pathCompile )
+		if( strlen( trim( $this->pathCompile ) ) > 0 )
 			$template->setCompilePath( $this->pathCompile );
-		if( !empty( $fileName ) )
+		if( NULL !== $fileName && strlen( trim( $fileName ) ) > 0 )
 			$template->setSourceFile( $fileName );
-		if( $data )
+		if( NULL !== $data )
 			$template->setData( $data );
 		return $template;
 	}
