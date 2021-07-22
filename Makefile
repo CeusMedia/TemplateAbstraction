@@ -26,5 +26,3 @@ dev-phpstan:
 
 dev-phpstan-save-baseline:
 	@vendor/bin/phpstan analyse --configuration phpstan.neon --generate-baseline phpstan-baseline.neon || true
-
-

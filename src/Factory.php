@@ -26,23 +26,23 @@ use RuntimeException;
  */
 class Factory
 {
-	/**	@param		string				$defaultType		... */
-	protected string $defaultType		= 'STE';
+	/**	@param		string		$defaultType		... */
+	protected $defaultType		= 'STE';
 
-	/**	@param		array				$engines		... */
-	protected array $engines			= array();
+	/**	@param		array		$engines		... */
+	protected $engines			= [];
 
-	/**	@param		string				$pathTemplates		... */
-	protected string $pathTemplates		= 'templates/';
+	/**	@param		string		$pathTemplates		... */
+	protected $pathTemplates	= 'templates/';
 
-	/**	@param		string				$pathCache		... */
-	protected string $pathCache			= 'templates/cache/';
+	/**	@param		string		$pathCache		... */
+	protected $pathCache		= 'templates/cache/';
 
-	/**	@param		string				$pathCompile		... */
-	protected string $pathCompile		= 'templates/compiled/';
+	/**	@param		string		$pathCompile		... */
+	protected $pathCompile		= 'templates/compiled/';
 
-	/**	@param		string				$patternType		... */
-	public string $patternType			= '/^<!--Engine:(\S+)-->\n?\r?/';
+	/**	@param		string		$patternType		... */
+	public $patternType			= '/^<!--Engine:(\S+)-->\n?\r?/';
 
 	/**
 	 *	Constructor.
