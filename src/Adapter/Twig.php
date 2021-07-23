@@ -63,7 +63,7 @@ class Twig extends AdapterAbstract
 
 	public function setSourceString( string $string ): AdapterAbstract
 	{
-		$id = uniqid( md5( microtime(TRUE ) ) );
+		$id = uniqid( md5( (string) microtime(TRUE ) ) );
 		$loader = new TwigArrayLoader( [
 			$id => $string,
 		] );

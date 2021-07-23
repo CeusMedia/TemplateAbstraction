@@ -13,6 +13,7 @@
 namespace CeusMedia\TemplateAbstraction\Adapter;
 
 use CeusMedia\TemplateAbstraction\AdapterAbstract;
+use RuntimeException;
 
 /**
  *	Adapter for phpHaml template engine.
@@ -29,12 +30,12 @@ class phpHaml extends AdapterAbstract
 	 *	Returns rendered template content.
 	 *	@access		public
 	 *	@return		string
-	 *	@throws		\RuntimeException		if no source file has been set
+	 *	@throws		RuntimeException		if no source file has been set
 	 */
 	public function render(): string
 	{
 		if( NULL === $this->fileSource )
-			throw new \RuntimeException( 'No source file set' );
+			throw new RuntimeException( 'No source file set' );
 		$engine	= new \HamlParser( $this->pathSource, $this->pathCache );
 		$engine->append( $this->data );
 		$content	= $engine->fetch( $this->fileSource );

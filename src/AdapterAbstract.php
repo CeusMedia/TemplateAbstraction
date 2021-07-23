@@ -10,6 +10,10 @@
  */
 namespace CeusMedia\TemplateAbstraction;
 
+use RuntimeException;
+use function phpversion;
+use function version_compare;
+
 /**
  *	Abstract basic adapter implementation.
  *	@category		Library
@@ -64,7 +68,7 @@ abstract class AdapterAbstract implements AdapterInterface
 	public function addData( string $key, $value, bool $force = FALSE ): AdapterAbstract
 	{
 		if( isset( $this->data[$key] ) && !$force )
-			throw new \RuntimeException( 'Template data key "'.$key.'" is already defined' );
+			throw new RuntimeException( 'Template data key "'.$key.'" is already defined' );
 		$this->data[$key]	= $value;
 		return $this;
 	}
@@ -148,9 +152,32 @@ abstract class AdapterAbstract implements AdapterInterface
 	 *	@access		protected
 	 *	@param		string			$content		Rendered template content
 	 *	@return		string			Rendered template content without type identifier
+	 *	@throws		RuntimeException				if replacing failed
 	 */
 	protected function removeTypeIdentifier( string $content ): string
 	{
-		return preg_replace( $this->factory->patternType, '', $content );
+		$result	= preg_replace( $this->factory->patternType, '', $content );
+		if( NULL === $result ){
+			$errorNr = preg_last_error();
+			if( version_compare( (string) phpversion(), "8", '>=' ) )
+				$errorMsg	= preg_last_error_msg();
+			else{
+				$pregConstantsOnReplace = [
+					0	=> 'PREG_NO_ERROR',
+					1	=> 'PREG_INTERNAL_ERROR',
+					2	=> 'PREG_BACKTRACK_LIMIT_ERROR',
+					3	=> 'PREG_RECURSION_LIMIT_ERROR',
+					4	=> 'PREG_BAD_UTF8_ERROR',
+					5	=> 'PREG_BAD_UTF8_OFFSET_ERROR',
+					6	=> 'PREG_JIT_STACKLIMIT_ERROR',
+				];
+				$errorMsg	= $pregConstantsOnReplace[$errorNr];
+			}
+			throw new RuntimeException( vsprintf( 'Removing identifier failed: %s', [
+				$errorMsg,
+				$errorNr,
+			] ) );
+		}
+		return $result;
 	}
 }

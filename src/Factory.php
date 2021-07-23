@@ -14,6 +14,7 @@ use FS_File_Reader as FileReader;
 use AdapterInterface;
 use ReflectionClass;
 use RuntimeException;
+use function class_exists;
 
 /**
  *	Factory for template from several template engines.
@@ -26,22 +27,22 @@ use RuntimeException;
  */
 class Factory
 {
-	/**	@param		string		$defaultType		... */
+	/**	@var		string		$defaultType		... */
 	protected $defaultType		= 'STE';
 
-	/**	@param		array		$engines		... */
+	/**	@var		array		$engines		... */
 	protected $engines			= [];
 
-	/**	@param		string		$pathTemplates		... */
+	/**	@var		string		$pathTemplates		... */
 	protected $pathTemplates	= 'templates/';
 
-	/**	@param		string		$pathCache		... */
+	/**	@var		string		$pathCache		... */
 	protected $pathCache		= 'templates/cache/';
 
-	/**	@param		string		$pathCompile		... */
+	/**	@var		string		$pathCompile		... */
 	protected $pathCompile		= 'templates/compiled/';
 
-	/**	@param		string		$patternType		... */
+	/**	@var		string		$patternType		... */
 	public $patternType			= '/^<!--Engine:(\S+)-->\n?\r?/';
 
 	/**
@@ -87,14 +88,10 @@ class Factory
 	 *	@param		string		$fileName		File name of template within set template path
 	 *	@param		array		$data			Map of template pairs
 	 *	@return		AdapterAbstract
-	 *	@throws		\RuntimeException			if no engine type could be identified
 	 */
 	public function getTemplate( string $fileName, array $data = NULL ): AdapterAbstract
 	{
-		$type	= $this->identifyType( $fileName );
-		$type	= $type ? $type : $this->defaultType;
-		if( !$type )
-			throw new RuntimeException( 'No engine identified or set' );
+		$type	= $this->identifyType( $fileName ) ?? $this->defaultType;
 		return $this->newTemplate( $type, $fileName, $data );
 	}
 
@@ -120,7 +117,7 @@ class Factory
 	{
 		$content	= FileReader::load( $this->pathTemplates.$fileName );
 		$matches	= array();
-		if( preg_match_all( $this->patternType, $content, $matches ) )
+		if( FALSE !== preg_match_all( $this->patternType, $content, $matches ) )
 			return $matches[1][0];
 		return NULL;
 	}
@@ -132,11 +129,14 @@ class Factory
 	 *	@param		string		$fileName		File name of template within set template path
 	 *	@param		array		$data			Map of template pairs
 	 *	@return		AdapterAbstract
+	 *	@throws		RuntimeException			if adapter for given type is not existing
 	 */
 	public function newTemplate( string $type, string $fileName = NULL, array $data = NULL ): AdapterAbstract
 	{
 		$this->initializeEngine( $type );
 		$className	= '\\CeusMedia\\TemplateAbstraction\\Adapter\\'.$type;
+		if( !class_exists( $className ) )
+			throw new RuntimeException( 'Adapter '.$type.' is not existing' );
 		$reflection	= new ReflectionClass( $className );
 		$template	= $reflection->newInstanceArgs( array( $this ) );
 		$template->setSourcePath( $this->pathTemplates );
@@ -180,12 +180,12 @@ class Factory
 	 *	@access		public
 	 *	@param		string			$type			Engine type to set as default
 	 *	@return		self
-	 *	@throws		RuntimeException				if engine is not available
+//	 *	@throws		RuntimeException				if engine is not available
 	 */
 	public function setDefaultType( string $type ): self
 	{
-		if( !array_key_exists( $type, $this->engines ) )
-			throw new RuntimeException( 'Engine "'.$type.'" is not available' );
+//		if( !array_key_exists( $type, $this->engines ) )
+//			throw new RuntimeException( 'Engine "'.$type.'" is not available' );
 		$this->defaultType	= $type;
 		return $this;
 	}

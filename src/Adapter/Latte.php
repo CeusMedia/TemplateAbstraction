@@ -13,6 +13,8 @@
 namespace CeusMedia\TemplateAbstraction\Adapter;
 
 use CeusMedia\TemplateAbstraction\AdapterAbstract;
+use Latte\Engine as LatteEngine;
+use RuntimeException;
 
 /**
  *	Adapter for Mustache template engine.
@@ -29,13 +31,13 @@ class Latte extends AdapterAbstract
 	 *	Returns rendered template content.
 	 *	@access		public
 	 *	@return		string
-	 *	@throws		\RuntimeException		if no source file has been set
+	 *	@throws		RuntimeException		if no source file has been set
 	 */
 	public function render(): string
 	{
 		if( NULL === $this->fileSource )
-			throw new \RuntimeException( 'No source file set' );
-		$latte		= new \Latte\Engine;
+			throw new RuntimeException( 'No source file set' );
+		$latte		= new LatteEngine;
 		$latte->setTempDirectory( $this->pathCache );
 		$content	= $latte->renderToString( $this->pathSource.$this->fileSource, $this->data );
 		$content	= $this->removeTypeIdentifier( $content );

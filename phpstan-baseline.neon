@@ -1,29 +1,19 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Instantiated class HamlParser not found\\.$#"
+			message: "#^Parameter \\#1 \\$sPath of class HamlParser constructor expects bool, string given\\.$#"
 			count: 1
 			path: src/Adapter/phpHaml.php
 
 		-
-			message: "#^Call to method append\\(\\) on an unknown class HamlParser\\.$#"
+			message: "#^Parameter \\#2 \\$bCompile of class HamlParser constructor expects bool, string given\\.$#"
 			count: 1
 			path: src/Adapter/phpHaml.php
 
 		-
-			message: "#^Call to method fetch\\(\\) on an unknown class HamlParser\\.$#"
+			message: "#^Function preg_last_error_msg not found\\.$#"
 			count: 1
-			path: src/Adapter/phpHaml.php
-
-		-
-			message: "#^Parameter \\#1 \\$objectOrClass of class ReflectionClass constructor expects class\\-string\\<T of object\\>\\|T of object, string given\\.$#"
-			count: 1
-			path: src/Factory.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:setSourcePath\\(\\)\\.$#"
-			count: 1
-			path: src/Factory.php
+			path: src/AdapterAbstract.php
 
 		-
 			message: "#^Call to an undefined method object\\:\\:setCachePath\\(\\)\\.$#"
@@ -36,12 +26,17 @@ parameters:
 			path: src/Factory.php
 
 		-
+			message: "#^Call to an undefined method object\\:\\:setData\\(\\)\\.$#"
+			count: 1
+			path: src/Factory.php
+
+		-
 			message: "#^Call to an undefined method object\\:\\:setSourceFile\\(\\)\\.$#"
 			count: 1
 			path: src/Factory.php
 
 		-
-			message: "#^Call to an undefined method object\\:\\:setData\\(\\)\\.$#"
+			message: "#^Call to an undefined method object\\:\\:setSourcePath\\(\\)\\.$#"
 			count: 1
 			path: src/Factory.php
 
