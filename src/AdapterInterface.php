@@ -64,8 +64,8 @@ interface AdapterInterface
 	/**
 	 *	Assigns a map of context data for template.
 	 *	@access		public
-	 *	@param		array			$map			Map of context data pairs
-	 *	@param		boolean			$force			Flag: override existing data pair
+	 *	@param		array<string,mixed>	$map			Map of context data pairs
+	 *	@param		boolean				$force			Flag: override existing data pair
 	 *	@return		AdapterAbstract
 	 */
 	public function setData( array $map, bool $force = FALSE ): AdapterAbstract;

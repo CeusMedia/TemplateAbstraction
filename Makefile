@@ -16,7 +16,7 @@ composer-update-dev:
 #	@php vendor/ceus-media/doc-creator/doc.php --config-file=doc.xml
 
 dev-test: composer-install-dev
-	@vendor/bin/phpunit
+	@vendor/bin/phpunit test
 
 dev-test-syntax:
 	@find src -type f -print0 | xargs -0 -n1 xargs php -l

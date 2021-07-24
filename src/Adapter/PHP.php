@@ -11,6 +11,8 @@
 namespace CeusMedia\TemplateAbstraction\Adapter;
 
 use CeusMedia\TemplateAbstraction\AdapterAbstract;
+use FS_File_Reader as FileReader;
+use RuntimeException;
 
 /**
  *	Adapter for using PHP as template engine.
@@ -28,23 +30,34 @@ class PHP extends AdapterAbstract
 	 *	Returns rendered template content.
 	 *	@access		public
 	 *	@return		string
-	 *	@throws		\RuntimeException		if no source file has been set
+	 *	@throws		RuntimeException				if not file source is set
+	 *	@throws		RuntimeException				if set file source is not existing
+	 *	@throws		RuntimeException				if set file source is not readable
+	 *	@throws		RuntimeException				if errors occurred during template execution
 	 */
 	public function render(): string
 	{
 		if( NULL === $this->fileSource )
-			throw new \RuntimeException( 'No source file set' );
+			throw new RuntimeException( 'No source file set' );
+		$filePath	= $this->pathSource.$this->fileSource;
+		$file		= new FileReader( $filePath, TRUE );
+
 		extract( $this->data );
 		ob_start();
-		$result		= require( $this->pathSource.$this->fileSource );
+		$result		= include( $filePath );
 		$buffer		= ob_get_clean();
-		$content	= $result;
-		if( strlen( trim( (string) $buffer ) ) > 0 )
-		{
-			if( is_string( $content ) )
-				$content	= $buffer;
-			else
-				throw new \RuntimeException( (string) $buffer );
+
+		if( 1 === $result ){
+			$content	= $buffer;
+		}
+		else{
+			$content	= $result;
+			if( strlen( trim( (string) $buffer ) ) > 0 ){
+				if( is_string( $content ) )
+					$content	= $buffer;
+				else
+					throw new RuntimeException( (string) $buffer );
+			}
 		}
 		$content	= $this->removeTypeIdentifier( $content );
 		return $content;

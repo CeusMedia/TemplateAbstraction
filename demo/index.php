@@ -22,11 +22,15 @@ try{
 		)
 	);
 
-	$factory	= new \CeusMedia\TemplateAbstraction\Factory();
-	$factory->setTemplatePath('templates/');
-//	$factory->setCachePath('templates/cache/');
+	$environment	= new \CeusMedia\TemplateAbstraction\Environment();
+	$environment->registerEnginesSupportedByLibrary();
+
+	$factory		= $environment->getFactory();
+	$factory->setTemplatePath( 'templates/' );
+//	$factory->setCachePath( 'templates/cache/' );
 
 	$files	= array(
+		'PHP'				=> 'hello.php',
 		'Smarty'			=> 'hello.smarty.html',
 		'Dwoo'				=> 'hello.dwoo.html',
 		'Mustache'			=> 'hello.mustache.html',

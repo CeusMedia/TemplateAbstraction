@@ -25,7 +25,7 @@ use function version_compare;
  */
 abstract class AdapterAbstract implements AdapterInterface
 {
-	/** @var	array			$data				... */
+	/** @var	array<string,mixed>		$data				... */
 	protected $data			= array();
 
 	/** @var	Factory		$factory			... */
@@ -100,8 +100,8 @@ abstract class AdapterAbstract implements AdapterInterface
 	/**
 	 *	Assigns a map of context data for template.
 	 *	@access		public
-	 *	@param		array			$map			Map of context data pairs
-	 *	@param		boolean			$force			Flag: override existing data pair
+	 *	@param		array<string,mixed>	$map			Map of context data pairs
+	 *	@param		boolean				$force			Flag: override existing data pair
 	 *	@return		AdapterAbstract
 	 */
 	public function setData( array $map, bool $force = FALSE ): AdapterAbstract

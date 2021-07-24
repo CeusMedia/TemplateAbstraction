@@ -11,7 +11,6 @@
 namespace CeusMedia\TemplateAbstraction;
 
 use FS_File_Reader as FileReader;
-use AdapterInterface;
 use ReflectionClass;
 use RuntimeException;
 use function class_exists;
@@ -28,15 +27,18 @@ use function class_exists;
 class Factory
 {
 	/**	@var		string		$defaultType		... */
-	protected $defaultType		= 'STE';
+	protected $defaultType		= 'PHP';
 
-	/**	@var		array		$engines		... */
+	/**	@var		array<string,Engine>		$engines			... */
 	protected $engines			= [];
+
+	/**	@var		Environment	$environment		... */
+	protected $environment;
 
 	/**	@var		string		$pathTemplates		... */
 	protected $pathTemplates	= 'templates/';
 
-	/**	@var		string		$pathCache		... */
+	/**	@var		string		$pathCache			... */
 	protected $pathCache		= 'templates/cache/';
 
 	/**	@var		string		$pathCompile		... */
@@ -47,31 +49,13 @@ class Factory
 
 	/**
 	 *	Constructor.
-	 *	Loads engine definitions from engine.ini.
 	 *	@access		public
+	 *	@param		Environment	$environment
 	 *	@return		void
 	 */
-//	 *	@param		string|array	$config		Filename of config file OR configuration as array
-	public function __construct(/* $config = NULL */)
+	public function __construct( Environment $environment )
 	{
-		/*
-		if( is_array( $config ) )
-			$this->engines	= $config;
-		else{
-			$fileName		= $config ? $config : dirname( __FILE__ ).'/engines.ini';
-			if( !file_exists( $fileName ) )
-				throw new \RuntimeException( 'Config file "'.$fileName.'" is missing' );
-			$this->engines	= parse_ini_file( $fileName, TRUE );
-		}
-		if( !array_key_exists( $this->defaultType, $this->engines ) ){
-			$this->defaultType		= NULL;
-			foreach( $this->engines as $engineName => $engineData ){
-				if( !empty( $engineData['default'] ) ){
-					$this->defaultType		= $engineName;
-					break;
-				}
-			}
-		}*/
+		$this->environment	= $environment;
 	}
 
 /*	public function getEngineSettings( $type )
@@ -85,14 +69,14 @@ class Factory
 	 *	Loads a template after identifying its engine type.
 	 *	If the engine type is known use newTemplate to avoid engine type detection.
 	 *	@access		public
-	 *	@param		string		$fileName		File name of template within set template path
-	 *	@param		array		$data			Map of template pairs
+	 *	@param		string				$fileName		File name of template within set template path
+	 *	@param		array<string,mixed>	$data			Map of template pairs
 	 *	@return		AdapterAbstract
 	 */
 	public function getTemplate( string $fileName, array $data = NULL ): AdapterAbstract
 	{
-		$type	= $this->identifyType( $fileName ) ?? $this->defaultType;
-		return $this->newTemplate( $type, $fileName, $data );
+		$engine	= $this->identifyEngine( $fileName );
+		return $this->newTemplate( $engine->getKey(), $fileName, $data );
 	}
 
 	/**
@@ -112,6 +96,7 @@ class Factory
 	 *	@access		public
 	 *	@param		string		$fileName		File name of template within template path
 	 *	@return		string|NULL
+	 *	@deprecated	use identifyEngine instead
 	 */
 	public function identifyType( string $fileName ): ?string
 	{
@@ -123,29 +108,45 @@ class Factory
 	}
 
 	/**
+	 *	@access		public
+	 *	@param		string		$filePath		File name of template within template path
+	 *	@return		Engine
+	 */
+	public function identifyEngine( string $filePath ): Engine
+	{
+		$content	= FileReader::load( $this->pathTemplates.$filePath );
+		$matches	= array();
+		if( FALSE !== preg_match_all( $this->patternType, $content, $matches ) )
+			foreach( $this->environment->getEngines() as $engine )
+				if( FALSE !== preg_match( $engine->getIdentifier(), $matches[1][0] ) )
+					return $engine;
+		return $this->environment->getDefaultEngine();
+	}
+
+	/**
 	 *	Loads a template of a known engine type.
 	 *	@access		public
-	 *	@param		string		$type			Engine type key, case sensitive, see engines.ini
-	 *	@param		string		$fileName		File name of template within set template path
-	 *	@param		array		$data			Map of template pairs
+	 *	@param		string				$engineKey		Engine key, case sensitive, see engines.ini
+	 *	@param		string				$filePath		File name of template within set template path
+	 *	@param		array<string,mixed>	$data			Map of template pairs
 	 *	@return		AdapterAbstract
 	 *	@throws		RuntimeException			if adapter for given type is not existing
 	 */
-	public function newTemplate( string $type, string $fileName = NULL, array $data = NULL ): AdapterAbstract
+	public function newTemplate( string $engineKey, string $filePath = NULL, array $data = NULL ): AdapterAbstract
 	{
-		$this->initializeEngine( $type );
-		$className	= '\\CeusMedia\\TemplateAbstraction\\Adapter\\'.$type;
-		if( !class_exists( $className ) )
-			throw new RuntimeException( 'Adapter '.$type.' is not existing' );
-		$reflection	= new ReflectionClass( $className );
+		$engine			= $this->environment->getEngine( $engineKey );
+		$adapterClass	= $engine->getAdapterClass();
+		if( !class_exists( $adapterClass ) )
+			throw new RuntimeException( 'Adapter '.$engineKey.' is not existing' );
+		$reflection	= new ReflectionClass( $adapterClass );
 		$template	= $reflection->newInstanceArgs( array( $this ) );
 		$template->setSourcePath( $this->pathTemplates );
 		if( strlen( trim( $this->pathCache ) ) > 0 )
 			$template->setCachePath( $this->pathCache );
 		if( strlen( trim( $this->pathCompile ) ) > 0 )
 			$template->setCompilePath( $this->pathCompile );
-		if( NULL !== $fileName && strlen( trim( $fileName ) ) > 0 )
-			$template->setSourceFile( $fileName );
+		if( NULL !== $filePath && strlen( trim( $filePath ) ) > 0 )
+			$template->setSourceFile( $filePath );
 		if( NULL !== $data )
 			$template->setData( $data );
 		return $template;
@@ -180,12 +181,12 @@ class Factory
 	 *	@access		public
 	 *	@param		string			$type			Engine type to set as default
 	 *	@return		self
-//	 *	@throws		RuntimeException				if engine is not available
+	 *	@throws		RuntimeException				if engine is not available
 	 */
 	public function setDefaultType( string $type ): self
 	{
-//		if( !array_key_exists( $type, $this->engines ) )
-//			throw new RuntimeException( 'Engine "'.$type.'" is not available' );
+		if( !array_key_exists( $type, $this->engines ) )
+			throw new RuntimeException( 'Engine "'.$type.'" is not available' );
 		$this->defaultType	= $type;
 		return $this;
 	}
@@ -199,37 +200,6 @@ class Factory
 	public function setTemplatePath( string $path ): self
 	{
 		$this->pathTemplates	= $path;
-		return $this;
-	}
-
-	/**
-	 *	Checks engine settings.
-	 *	Tries to load engine from file or registers an autoloader for a path.
-	 *	Notes ready state of engine and skips on a second run.
-	 *	@access		protected
-	 *	@param		string		$type		Engine type key
-	 *	@return		self
-	 *	@throws		RuntimeException	if engine type is unknown
-	 *	@throws		RuntimeException	if engine is not enabled
-	 */
-	protected function initializeEngine( string $type ): self
-	{/*
-		if( empty( $this->engines[$type] ) ){														//  not engine for engine type
-			throw new \OutOfRangeException( 'Unknown engine "'.$type.'"' );							//  quit with exception
-		}
-		$engine	= (object) $this->engines[$type];													//  extract engine from engine map
-		if( (int) $engine->active === 0 ){															//  engine is disabled
-			throw new \RuntimeException( 'Engine "'.$type.'" not enabled' );						//  quit with exception
-		}
-		if( !empty( $engine->loadPath ) ){															//  autoloader path is set
-			$ext	= empty( $engine->loadExtension ) ? 'php' : $engine->loadExtension;				//  figure class extensions
-			$prefix	= empty( $engine->loadPrefix ) ? NULL : $engine->loadPrefix;					//  figure class prefix
-			\CMC_Loader::registerNew( $ext, $prefix, $engine->loadPath );							//  enable class autoloading
-		}
-		if( !empty( $engine->loadFile ) ){															//  single load file is set
-			require_once $engine->loadFile;															//  try to load single load file
-		}
-		$this->engines[$type]->active	= 2;*/														//  mark this engine as loaded
 		return $this;
 	}
 }
