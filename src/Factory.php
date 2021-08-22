@@ -116,10 +116,13 @@ class Factory
 	{
 		$content	= FileReader::load( $this->pathTemplates.$filePath );
 		$matches	= array();
-		if( FALSE !== preg_match_all( $this->patternType, $content, $matches ) )
-			foreach( $this->environment->getEngines() as $engine )
-				if( FALSE !== preg_match( $engine->getIdentifier(), $matches[1][0] ) )
+		if( FALSE !== preg_match_all( $this->patternType, $content, $matches ) ){
+			foreach( $this->environment->getEngines() as $engine ){
+				$result = preg_match( $engine->getIdentifier(), $matches[1][0] );
+				if( FALSE !== $result && 0 < $result )
 					return $engine;
+			}
+		}
 		return $this->environment->getDefaultEngine();
 	}
 
