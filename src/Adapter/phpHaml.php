@@ -13,6 +13,7 @@
 namespace CeusMedia\TemplateAbstraction\Adapter;
 
 use CeusMedia\TemplateAbstraction\AdapterAbstract;
+use HamlParser as HamlEngine;
 use RuntimeException;
 
 /**
@@ -36,7 +37,7 @@ class phpHaml extends AdapterAbstract
 	{
 		if( NULL === $this->fileSource )
 			throw new RuntimeException( 'No source file set' );
-		$engine	= new \HamlParser( $this->pathSource, $this->pathCache );
+		$engine	= new HamlEngine( $this->pathSource, $this->pathCache );
 		$engine->append( $this->data );
 		$content	= $engine->fetch( $this->fileSource );
 		$content	= $this->removeTypeIdentifier( $content );

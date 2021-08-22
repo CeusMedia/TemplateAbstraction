@@ -12,6 +12,7 @@ namespace CeusMedia\TemplateAbstraction\Adapter;
 
 use CeusMedia\TemplateAbstraction\AdapterAbstract;
 use FS_File_Reader as FileReader;
+use FS_File as File;
 use RuntimeException;
 
 /**
@@ -40,7 +41,9 @@ class PHP extends AdapterAbstract
 		if( NULL === $this->fileSource )
 			throw new RuntimeException( 'No source file set' );
 		$filePath	= $this->pathSource.$this->fileSource;
-		$file		= new FileReader( $filePath, TRUE );
+		$file		= new File( $filePath );
+		if( !$file->exists() )
+			throw new RuntimeException( 'Template file \''.$filePath.'\' is not existing' );
 
 		extract( $this->data );
 		ob_start();

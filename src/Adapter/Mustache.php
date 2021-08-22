@@ -13,6 +13,9 @@
 namespace CeusMedia\TemplateAbstraction\Adapter;
 
 use CeusMedia\TemplateAbstraction\AdapterAbstract;
+use Mustache_Engine as MustacheEngine;
+use Mustache_Loader_FilesystemLoader as MustacheFilesystemLoader;
+use RuntimeException;
 
 /**
  *	Adapter for Mustache template engine.
@@ -29,18 +32,18 @@ class Mustache extends AdapterAbstract
 	 *	Returns rendered template content.
 	 *	@access		public
 	 *	@return		string
-	 *	@throws		\RuntimeException		if no source file has been set
+	 *	@throws		RuntimeException		if no source file has been set
 	 */
 	public function render(): string
 	{
 		if( NULL === $this->fileSource )
-			throw new \RuntimeException( 'No source file set' );
+			throw new RuntimeException( 'No source file set' );
 //		$settings	= (object) $this->factory->getEngineSettings( 'Mustache' );
 		$options	= array(
 			'extension'	=> /*isset( $settings->extension ) ? $settings->extension : */'html',
 		);
-		$engine		= new \Mustache_Engine;
-		$loader		= new \Mustache_Loader_FilesystemLoader( $this->pathSource, $options );
+		$engine		= new MustacheEngine();
+		$loader		= new MustacheFilesystemLoader( $this->pathSource, $options );
 		$engine->setLoader( $loader );
 		$template	= $engine->loadTemplate( $this->fileSource );
 		$content	= $template->render( $this->data );

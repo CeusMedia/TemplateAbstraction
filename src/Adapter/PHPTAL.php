@@ -11,6 +11,8 @@
 namespace CeusMedia\TemplateAbstraction\Adapter;
 
 use CeusMedia\TemplateAbstraction\AdapterAbstract;
+use RuntimeException;
+use PHPTAL as PhptalEngine;
 
 /**
  *	Adapter for PHPTAL template engine.
@@ -27,13 +29,13 @@ class PHPTAL extends AdapterAbstract
 	 *	Returns rendered template content.
 	 *	@access		public
 	 *	@return		string
-	 *	@throws		\RuntimeException		if no source file has been set
+	 *	@throws		RuntimeException		if no source file has been set
 	 */
 	public function render(): string
 	{
 		if( NULL === $this->fileSource )
-			throw new \RuntimeException( 'No source file set' );
-		$template	= new \PHPTAL();
+			throw new RuntimeException( 'No source file set' );
+		$template	= new PhptalEngine();
 		foreach( $this->data as $key => $value )
 			$template->set( $key, $value );
 		$template->setTemplate( $this->pathSource.$this->fileSource );

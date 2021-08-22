@@ -17,7 +17,7 @@ use Latte\Engine as LatteEngine;
 use RuntimeException;
 
 /**
- *	Adapter for Mustache template engine.
+ *	Adapter for Latte template engine.
  *	@category		Library
  *	@package		CeusMedia_TemplateAbstraction_Adapter
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
@@ -37,7 +37,7 @@ class Latte extends AdapterAbstract
 	{
 		if( NULL === $this->fileSource )
 			throw new RuntimeException( 'No source file set' );
-		$latte		= new LatteEngine;
+		$latte		= new LatteEngine();
 		$latte->setTempDirectory( $this->pathCache );
 		$content	= $latte->renderToString( $this->pathSource.$this->fileSource, $this->data );
 		$content	= $this->removeTypeIdentifier( $content );

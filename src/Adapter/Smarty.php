@@ -11,6 +11,8 @@
 namespace CeusMedia\TemplateAbstraction\Adapter;
 
 use CeusMedia\TemplateAbstraction\AdapterAbstract;
+use RuntimeException;
+use Smarty as SmartyEngine;
 
 /**
  *	Adapter for Smarty template engine.
@@ -27,13 +29,13 @@ class Smarty extends AdapterAbstract
 	 *	Returns rendered template content.
 	 *	@access		public
 	 *	@return		string
-	 *	@throws		\RuntimeException		if no source file has been set
+	 *	@throws		RuntimeException		if no source file has been set
 	 */
 	public function render(): string
 	{
 		if( NULL === $this->fileSource )
-			throw new \RuntimeException( 'No source file set' );
-		$template	= new \Smarty();
+			throw new RuntimeException( 'No source file set' );
+		$template	= new SmartyEngine();
 		$template->setTemplateDir( $this->pathSource );
 		$template->setCompileDir( $this->pathCache );
 		foreach( $this->data as $key => $value )

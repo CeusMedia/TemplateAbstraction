@@ -11,6 +11,9 @@
 namespace CeusMedia\TemplateAbstraction\Adapter;
 
 use CeusMedia\TemplateAbstraction\AdapterAbstract;
+use CeusMedia\TemplateEngine\Template as TemplateEngineTemplate;
+use RuntimeException;
+
 
 /**
  *	Adapter for cmModules template engine "STE".
@@ -27,14 +30,14 @@ class STE extends AdapterAbstract
 	 *	Returns rendered template content.
 	 *	@access		public
 	 *	@return		string
-	 *	@throws		\RuntimeException		if no source file has been set
+	 *	@throws		RuntimeException		if no source file has been set
 	 */
 	public function render(): string
 	{
 		if( NULL === $this->fileSource )
-			throw new \RuntimeException( 'No source file set' );
-		\CeusMedia\TemplateEngine\Template::setTemplatePath( $this->pathSource );
-		$template	= new \CeusMedia\TemplateEngine\Template();
+			throw new RuntimeException( 'No source file set' );
+		TemplateEngineTemplate::setTemplatePath( $this->pathSource );
+		$template	= new TemplateEngineTemplate();
 		$template->setTemplate( $this->fileSource );
 		$template->add( $this->data );
 		$content	= $template->render();
