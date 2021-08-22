@@ -1,39 +1,38 @@
-
 [CMC]
-active			= 1
-
-[STE]
-active			= 1
+adapterClass	= "CeusMedia\\TemplateAbstraction\\Adapter\\CMC"
+title			= "Simple logicless template engine included in CeusMedia::Common."
 
 [Smarty]
-active			= 1
-loadFile		= "Smarty/3.0/libs/Smarty.class.php"
+adapterClass	= "CeusMedia\\TemplateAbstraction\\Adapter\\Smarty"
+title			= "Smarty Template Engine."
 
 [phpHaml]
-active			= 1
-loadFile		= "phpHaml/1.0/includes/haml/HamlParser.class.php"
+adapterClass	= "CeusMedia\\TemplateAbstraction\\Adapter\\phpHaml"
+title			= "phpHaml Template Engine."
 
 [Twig]
-active			= 1
-loadExtension	= "php"
-loadPath		= "/var/www/lib/Twig/trunk/"
-loadPrefix		= "Twig"
+adapterClass	= "CeusMedia\\TemplateAbstraction\\Adapter\\Twig"
+title			= "Twig Template Engine."
 
 [PHPTAL]
-active			= 1
-loadPath		= "/var/www/lib/PHPTAL/trunk/classes/"
-loadExtension	= "php"
+adapterClass	= "CeusMedia\\TemplateAbstraction\\Adapter\\PHPTAL"
+title			= "PHPTAL Template Engine."
 
 [Dwoo]
-active			= 1
-loadFile		= "dwoo/1.1.1/dwooAutoload.php"
+adapterClass	= "CeusMedia\\TemplateAbstraction\\Adapter\\Dwoo"
+title			= "Dwoo Template Engine."
 
 [Mustache]
-active			= 1
-extension		= "html"
-loadExtension	= "php"
-loadPath		= "/var/www/lib/mustache.php/src/Mustache/";
-loadPrefix		= "Mustache_";
+adapterClass	= "CeusMedia\\TemplateAbstraction\\Adapter\\Mustache"
+title			= "Mustache Template Engine."
 
 [Latte]
-active			= 1
+adapterClass	= "CeusMedia\\TemplateAbstraction\\Adapter\\Latte"
+title			= "Latte Template Engine."
+
+[H2O]
+adapterClass	= "CeusMedia\\TemplateAbstraction\\Adapter\\H2O"
+title			= "H2O Template Engine."
+
+;[STE]
+;active			= 1

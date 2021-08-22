@@ -39,6 +39,7 @@ try{
 		'PHPTAL'			=> 'hello.phptal.html',
 		'TemplateEngine'	=> 'hello.ste.html',
 		'phpHaml'			=> 'hello.phphaml.html',
+		'H2O'				=> 'hello.h2o.html',
 	);
 
 	foreach( $files as $engine => $file ){
