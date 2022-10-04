@@ -124,7 +124,7 @@ class Factory
 	{
 		$content	= FileReader::load( $this->pathTemplates.$filePath );
 		$matches	= array();
-		if( FALSE !== preg_match_all( $this->patternType, $content, $matches ) ){
+		if( 0 !== preg_match_all( $this->patternType, $content, $matches ) ){
 			foreach( $this->environment->getEngines() as $engine ){
 				$result = preg_match( $engine->getIdentifier(), $matches[1][0] );
 				if( FALSE !== $result && 0 < $result )
@@ -172,7 +172,7 @@ class Factory
 	 */
 	public function setCachePath( string $path ): self
 	{
-		$this->pathCache	= $path;
+		$this->pathCache	= rtrim( $path, '/' ).'/';
 		return $this;
 	}
 
@@ -184,7 +184,7 @@ class Factory
 	 */
 	public function setCompilePath( string $path ): self
 	{
-		$this->pathCompile	= $path;
+		$this->pathCompile	= rtrim( $path, '/' ).'/';
 		return $this;
 	}
 
@@ -211,7 +211,7 @@ class Factory
 	 */
 	public function setTemplatePath( string $path ): self
 	{
-		$this->pathTemplates	= $path;
+		$this->pathTemplates	= rtrim( $path, '/' ).'/';
 		return $this;
 	}
 }
