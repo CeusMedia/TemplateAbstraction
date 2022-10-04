@@ -1,4 +1,9 @@
 <?php
+/** @noinspection PhpUnused */
+/** @noinspection PhpMultipleClassDeclarationsInspection */
+
+declare(strict_types=1);
+
 /**
  *	Factory for template from several template engines.
  *	@category		Library
@@ -8,10 +13,12 @@
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
  *	@link			https://github.com/CeusMedia/TemplateAbstraction
  */
+
 namespace CeusMedia\TemplateAbstraction;
 
-use FS_File_Reader as FileReader;
+use CeusMedia\Common\FS\File\Reader as FileReader;
 use ReflectionClass;
+use ReflectionException;
 use RuntimeException;
 use function class_exists;
 
@@ -26,26 +33,26 @@ use function class_exists;
  */
 class Factory
 {
-	/**	@var		string		$defaultType		... */
-	protected $defaultType		= 'PHP';
+	/**	@var		string					$defaultType		... */
+	protected string $defaultType			= 'PHP';
 
-	/**	@var		array<string,Engine>		$engines			... */
-	protected $engines			= [];
+	/**	@var		array<string,Engine>	$engines			... */
+	protected array $engines				= [];
 
-	/**	@var		Environment	$environment		... */
-	protected $environment;
+	/**	@var		Environment				$environment		... */
+	protected Environment $environment;
 
-	/**	@var		string		$pathTemplates		... */
-	protected $pathTemplates	= 'templates/';
+	/**	@var		string					$pathTemplates		... */
+	protected string $pathTemplates			= 'templates/';
 
-	/**	@var		string		$pathCache			... */
-	protected $pathCache		= 'templates/cache/';
+	/**	@var		string					$pathCache			... */
+	protected string $pathCache				= 'templates/cache/';
 
-	/**	@var		string		$pathCompile		... */
-	protected $pathCompile		= 'templates/compiled/';
+	/**	@var		string					$pathCompile		... */
+	protected string $pathCompile			= 'templates/compiled/';
 
-	/**	@var		string		$patternType		... */
-	public $patternType			= '/^<!--Engine:(\S+)-->\n?\r?/';
+	/**	@var		string					$patternType		... */
+	public string$patternType				= '/^<!--Engine:(\S+)-->\n?\r?/';
 
 	/**
 	 *	Constructor.
@@ -71,9 +78,10 @@ class Factory
 	 *	@access		public
 	 *	@param		string				$fileName		File name of template within set template path
 	 *	@param		array<string,mixed>	$data			Map of template pairs
-	 *	@return		AdapterAbstract
+	 *	@return		AdapterInterface
+	 *	@throws		ReflectionException
 	 */
-	public function getTemplate( string $fileName, array $data = NULL ): AdapterAbstract
+	public function getTemplate( string $fileName, array $data = [] ): AdapterInterface
 	{
 		$engine	= $this->identifyEngine( $fileName );
 		return $this->newTemplate( $engine->getKey(), $fileName, $data );
@@ -129,19 +137,21 @@ class Factory
 	/**
 	 *	Loads a template of a known engine type.
 	 *	@access		public
-	 *	@param		string				$engineKey		Engine key, case sensitive, see engines.ini
-	 *	@param		string				$filePath		File name of template within set template path
+	 *	@param		string				$engineKey		Engine key, case-sensitive, see engines.ini
+	 *	@param		string|NULL			$filePath		File name of template within set template path
 	 *	@param		array<string,mixed>	$data			Map of template pairs
-	 *	@return		AdapterAbstract
-	 *	@throws		RuntimeException			if adapter for given type is not existing
+	 *	@return		AdapterInterface
+	 *	@throws		RuntimeException	if adapter for given type is not existing
+	 *	@throws		ReflectionException	if adapter for given type is not existing
 	 */
-	public function newTemplate( string $engineKey, string $filePath = NULL, array $data = NULL ): AdapterAbstract
+	public function newTemplate( string $engineKey, string $filePath = NULL, array $data = [] ): AdapterInterface
 	{
 		$engine			= $this->environment->getEngine( $engineKey );
 		$adapterClass	= $engine->getAdapterClass();
 		if( !class_exists( $adapterClass ) )
 			throw new RuntimeException( 'Adapter '.$engineKey.' is not existing' );
 		$reflection	= new ReflectionClass( $adapterClass );
+		/** @var AdapterInterface $template */
 		$template	= $reflection->newInstanceArgs( array( $this ) );
 		$template->setSourcePath( $this->pathTemplates );
 		if( strlen( trim( $this->pathCache ) ) > 0 )
@@ -150,8 +160,7 @@ class Factory
 			$template->setCompilePath( $this->pathCompile );
 		if( NULL !== $filePath && strlen( trim( $filePath ) ) > 0 )
 			$template->setSourceFile( $filePath );
-		if( NULL !== $data )
-			$template->setData( $data );
+		$template->setData( $data );
 		return $template;
 	}
 

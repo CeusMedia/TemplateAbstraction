@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  *	Adapter for Mustache template engine.
  *	@category		Library
@@ -10,6 +12,7 @@
  *	@see			http://mustache.github.io/mustache.5.html Templating Guide
  *	@see			https://github.com/bobthecow/mustache.php @GitHub
  */
+
 namespace CeusMedia\TemplateAbstraction\Adapter;
 
 use CeusMedia\TemplateAbstraction\AdapterAbstract;
@@ -36,18 +39,17 @@ class Mustache extends AdapterAbstract
 	 */
 	public function render(): string
 	{
-		if( NULL === $this->fileSource )
+		if( NULL === $this->sourceFile )
 			throw new RuntimeException( 'No source file set' );
 //		$settings	= (object) $this->factory->getEngineSettings( 'Mustache' );
 		$options	= array(
 			'extension'	=> /*isset( $settings->extension ) ? $settings->extension : */'html',
 		);
 		$engine		= new MustacheEngine();
-		$loader		= new MustacheFilesystemLoader( $this->pathSource, $options );
+		$loader		= new MustacheFilesystemLoader( $this->sourcePath, $options );
 		$engine->setLoader( $loader );
-		$template	= $engine->loadTemplate( $this->fileSource );
+		$template	= $engine->loadTemplate( $this->sourceFile );
 		$content	= $template->render( $this->data );
-		$content	= $this->removeTypeIdentifier( $content );
-		return $content;
+		return $this->removeTypeIdentifier( $content );
 	}
 }

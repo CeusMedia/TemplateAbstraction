@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  *	Adapter for PHPTAL template engine.
  *	@category		Library
@@ -8,6 +10,7 @@
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
  *	@link			https://github.com/CeusMedia/TemplateAbstraction
  */
+
 namespace CeusMedia\TemplateAbstraction\Adapter;
 
 use CeusMedia\TemplateAbstraction\AdapterAbstract;
@@ -33,14 +36,13 @@ class PHPTAL extends AdapterAbstract
 	 */
 	public function render(): string
 	{
-		if( NULL === $this->fileSource )
+		if( NULL === $this->sourceFile )
 			throw new RuntimeException( 'No source file set' );
 		$template	= new PhptalEngine();
 		foreach( $this->data as $key => $value )
 			$template->set( $key, $value );
-		$template->setTemplate( $this->pathSource.$this->fileSource );
+		$template->setTemplate( $this->sourcePath.$this->sourceFile );
 		$content	= $template->execute();
-		$content	= $this->removeTypeIdentifier( $content );
-		return $content;
+		return $this->removeTypeIdentifier( $content );
 	}
 }

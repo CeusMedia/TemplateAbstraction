@@ -1,4 +1,8 @@
 <?php
+/** @noinspection PhpMultipleClassDeclarationsInspection */
+
+declare(strict_types=1);
+
 /**
  *	Adapter for Dwoo template engine.
  *	@category		Library
@@ -9,9 +13,13 @@
  *	@link			https://github.com/CeusMedia/TemplateAbstraction
  *	@see			https://dwoo.org/documentation/v1.3/dwoo-for-designers.html Templating Guide
  */
+
 namespace CeusMedia\TemplateAbstraction\Adapter;
 
 use CeusMedia\TemplateAbstraction\AdapterAbstract;
+use Dwoo\Core as DwooEngine;
+use Exception;
+use RuntimeException;
 
 /**
  *	Adapter for Dwoo template engine.
@@ -28,20 +36,19 @@ class Dwoo extends AdapterAbstract
 	 *	Returns rendered template content.
 	 *	@access		public
 	 *	@return		string
-	 *	@throws		\RuntimeException		if no source file has been set
-	 *	@throws		\RuntimeException		if Dwoo Core failed to render template
+	 *	@throws		RuntimeException		if no source file has been set
+	 *	@throws		Exception				if Dwoo Core failed to render template
 	 */
 	public function render(): string
 	{
-		if( NULL === $this->fileSource )
-			throw new \RuntimeException( 'No source file set' );
-		$template	= new \Dwoo\Core();
+		if( NULL === $this->sourceFile )
+			throw new RuntimeException( 'No source file set' );
+		$template	= new DwooEngine();
 		$template->setCacheDir( $this->pathCache );
 		$template->setCompileDir( $this->pathCompile );
-		$content	= $template->get( $this->pathSource.$this->fileSource, $this->data );
+		$content	= $template->get( $this->sourcePath.$this->sourceFile, $this->data );
 		if( !is_string( $content ) )
-			throw new \RuntimeException( 'Dwoo Core failed to render template' );
-		$content	= $this->removeTypeIdentifier( $content );
-		return $content;
+			throw new RuntimeException( 'Dwoo Core failed to render template' );
+		return $this->removeTypeIdentifier( $content );
 	}
 }

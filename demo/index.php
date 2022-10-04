@@ -1,28 +1,36 @@
 <?php
+/** @noinspection PhpMultipleClassDeclarationsInspection */
+
+use CeusMedia\Common\FS\File\Reader as FileReader;
+use CeusMedia\Common\UI\HTML\Exception\Page as HtmlExceptionPage;
+use CeusMedia\Common\UI\HTML\Exception\View as HtmlExceptionView;
+use CeusMedia\TemplateAbstraction\Environment;
+
 ( @include '../vendor/autoload.php' ) or die( 'Please use composer to install required packages.' );
 
 ini_set( 'display_errors', 'On' );
 error_reporting( E_ALL );
 ob_start();
-new UI_DevOutput();
+
+new CeusMedia\Common\UI\DevOutput();
 
 $examples	= [];
 try{
-	$dataUserArray	= (array) array(
-		'name'	=> (array) array(
+	$dataUserArray	= [
+		'name'	=> [
 			'first'	=> 'John',
 			'last'	=> 'Doe',
-		)
-	);
+		]
+	];
 
-	$dataUserObject	= (object) array(
-		'name'	=> (object) array(
+	$dataUserObject	= (object) [
+		'name'	=> (object) [
 			'first'	=> 'John',
 			'last'	=> 'Doe',
-		)
-	);
+		]
+	];
 
-	$environment	= new \CeusMedia\TemplateAbstraction\Environment();
+	$environment	= new Environment();
 	$environment->registerEnginesSupportedByLibrary();
 
 	$factory		= $environment->getFactory();
@@ -51,8 +59,8 @@ try{
 		try{
 			$content	= $template->render();
 		}
-		catch( \Exception $e ){
-			$content	= \UI_HTML_Exception_View::render( $e );
+		catch( Exception $e ){
+			$content	= HtmlExceptionView::render( $e );
 		}
 		$examples[]	= '<h3>'.$engine.'</h3>
 
@@ -64,7 +72,7 @@ try{
 	</ul>
 	<div class="tab-content">
 		<div class="tab-pane active" id="'.$key.'-template">
-			<pre>'.htmlentities( \FS_File_Reader::load( 'templates/'.$file ) ).'</pre>
+			<pre>'.htmlentities( FileReader::load( 'templates/'.$file ) ).'</pre>
 		</div>
 		<div class="tab-pane" id="'.$key.'-source">
 			<pre>'.htmlentities( $content ).'</pre>
@@ -77,7 +85,7 @@ try{
 	}
 }
 catch( Exception $e ){
-	UI_HTML_Exception_Page::display( $e );
+	HtmlExceptionPage::display( $e );
 	exit;
 }
 
@@ -88,7 +96,7 @@ $body = '
 	'.join( $examples ).'
 </div>';
 
-$page	= new UI_HTML_PageFrame();
+$page	= new \CeusMedia\Common\UI\HTML\PageFrame();
 $page->addStylesheet( 'https://cdn.ceusmedia.de/css/bootstrap.min.css' );
 $page->addJavaScript( 'https://cdn.ceusmedia.de/js/jquery/1.10.2.min.js' );
 $page->addJavaScript( 'https://cdn.ceusmedia.de/js/bootstrap.min.js' );

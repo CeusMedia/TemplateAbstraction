@@ -1,4 +1,8 @@
 <?php
+/** @noinspection PhpMultipleClassDeclarationsInspection */
+
+declare(strict_types=1);
+
 /**
  *	Adapter for using PHP as template engine.
  *	@category		Library
@@ -8,11 +12,12 @@
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
  *	@link			https://github.com/CeusMedia/TemplateAbstraction
  */
+
 namespace CeusMedia\TemplateAbstraction\Adapter;
 
 use CeusMedia\TemplateAbstraction\AdapterAbstract;
-use FS_File_Reader as FileReader;
-use FS_File as File;
+use CeusMedia\Common\Exception\IO as IoException;
+use CeusMedia\Common\FS\File as File;
 use RuntimeException;
 
 /**
@@ -32,15 +37,15 @@ class PHP extends AdapterAbstract
 	 *	@access		public
 	 *	@return		string
 	 *	@throws		RuntimeException				if not file source is set
-	 *	@throws		RuntimeException				if set file source is not existing
+	 *	@throws		IoException						if set file source is not existing
 	 *	@throws		RuntimeException				if set file source is not readable
 	 *	@throws		RuntimeException				if errors occurred during template execution
 	 */
 	public function render(): string
 	{
-		if( NULL === $this->fileSource )
+		if( NULL === $this->sourceFile )
 			throw new RuntimeException( 'No source file set' );
-		$filePath	= $this->pathSource.$this->fileSource;
+		$filePath	= $this->sourcePath.$this->sourceFile;
 		$file		= new File( $filePath );
 		if( !$file->exists() )
 			throw new RuntimeException( 'Template file \''.$filePath.'\' is not existing' );
@@ -62,7 +67,6 @@ class PHP extends AdapterAbstract
 					throw new RuntimeException( (string) $buffer );
 			}
 		}
-		$content	= $this->removeTypeIdentifier( $content );
-		return $content;
+		return $this->removeTypeIdentifier( $content );
 	}
 }

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  *	Adapter for Latte template engine.
  *	@category		Library
@@ -10,6 +12,7 @@
  *	@see			https://latte.nette.org/en/syntax Templating Guide
  *	@see			https://github.com/nette/latte @GitHub
  */
+
 namespace CeusMedia\TemplateAbstraction\Adapter;
 
 use CeusMedia\TemplateAbstraction\AdapterAbstract;
@@ -35,12 +38,11 @@ class Latte extends AdapterAbstract
 	 */
 	public function render(): string
 	{
-		if( NULL === $this->fileSource )
+		if( NULL === $this->sourceFile )
 			throw new RuntimeException( 'No source file set' );
 		$latte		= new LatteEngine();
 		$latte->setTempDirectory( $this->pathCache );
-		$content	= $latte->renderToString( $this->pathSource.$this->fileSource, $this->data );
-		$content	= $this->removeTypeIdentifier( $content );
-		return $content;
+		$content	= $latte->renderToString( $this->sourcePath.$this->sourceFile, $this->data );
+		return $this->removeTypeIdentifier( $content );
 	}
 }

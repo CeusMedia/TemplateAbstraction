@@ -1,4 +1,9 @@
 <?php
+/** @noinspection PhpUnused */
+/** @noinspection PhpMultipleClassDeclarationsInspection */
+
+declare(strict_types=1);
+
 /**
  *	Adapter for cmClasses template engine.
  *	@category		Library
@@ -8,9 +13,12 @@
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
  *	@link			https://github.com/CeusMedia/TemplateAbstraction
  */
+
 namespace CeusMedia\TemplateAbstraction\Adapter;
 
+use CeusMedia\Common\UI\Template;
 use CeusMedia\TemplateAbstraction\AdapterAbstract;
+use RuntimeException;
 
 /**
  *	Adapter for cmClasses template engine.
@@ -27,15 +35,14 @@ class CMC extends AdapterAbstract
 	 *	Returns rendered template content.
 	 *	@access		public
 	 *	@return		string
-	 *	@throws		\RuntimeException		if no source file has been set
+	 *	@throws		RuntimeException		if no source file has been set
 	 */
 	public function render(): string
 	{
-		if( NULL === $this->fileSource )
-			throw new \RuntimeException( 'No source file set' );
-		$pathName	= $this->pathSource.$this->fileSource;
-		$content	= \UI_Template::render( $pathName, $this->data );
-		$content	= $this->removeTypeIdentifier( $content );
-		return $content;
+		if( NULL === $this->sourceFile )
+			throw new RuntimeException( 'No source file set' );
+		$pathName	= $this->sourcePath.$this->sourceFile;
+		$content	= Template::render( $pathName, $this->data );
+		return $this->removeTypeIdentifier( $content );
 	}
 }

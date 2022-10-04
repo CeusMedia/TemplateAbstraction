@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  *	Adapter for phpHaml template engine.
  *	@category		Library
@@ -10,6 +12,7 @@
  *	@see			https://haml.info/docs/yardoc/file.REFERENCE.html Templating Guide
  *	@see			https://github.com/kriss0r/phphaml @GitHub
  */
+
 namespace CeusMedia\TemplateAbstraction\Adapter;
 
 use CeusMedia\TemplateAbstraction\AdapterAbstract;
@@ -35,12 +38,11 @@ class phpHaml extends AdapterAbstract
 	 */
 	public function render(): string
 	{
-		if( NULL === $this->fileSource )
+		if( NULL === $this->sourceFile )
 			throw new RuntimeException( 'No source file set' );
-		$engine	= new HamlEngine( $this->pathSource, $this->pathCache );
+		$engine	= new HamlEngine( $this->sourcePath, $this->pathCache );
 		$engine->append( $this->data );
-		$content	= $engine->fetch( $this->fileSource );
-		$content	= $this->removeTypeIdentifier( $content );
-		return $content;
+		$content	= $engine->fetch( $this->sourceFile );
+		return $this->removeTypeIdentifier( $content );
 	}
 }
