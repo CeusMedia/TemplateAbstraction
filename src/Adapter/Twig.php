@@ -16,6 +16,7 @@ namespace CeusMedia\TemplateAbstraction\Adapter;
 
 use CeusMedia\TemplateAbstraction\AdapterAbstract;
 use CeusMedia\TemplateAbstraction\AdapterInterface;
+use CeusMedia\TemplateEngine\Template as TemplateEngine;
 use Twig\Environment as TwigEnvironment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -42,6 +43,14 @@ class Twig extends AdapterAbstract
 {
 	/**	@var	TwigTemplateWrapper|NULL		$sourceString	Twig template instance, if a source has been set */
 	protected ?TwigTemplateWrapper $template	= NULL;
+
+	/**
+	 *	@return		bool
+	 */
+	public function isPackageInstalled(): bool
+	{
+		return class_exists( TwigFilesystemLoader::class );
+	}
 
 	/**
 	 *	Returns rendered template content.

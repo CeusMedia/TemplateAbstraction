@@ -33,6 +33,14 @@ use RuntimeException;
 class Dwoo extends AdapterAbstract
 {
 	/**
+	 *	@return		bool
+	 */
+	public function isPackageInstalled(): bool
+	{
+		return class_exists( DwooEngine::class );
+	}
+
+	/**
 	 *	Returns rendered template content.
 	 *	@access		public
 	 *	@return		string

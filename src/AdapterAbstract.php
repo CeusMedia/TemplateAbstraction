@@ -78,6 +78,14 @@ abstract class AdapterAbstract implements AdapterInterface
 	}
 
 	/**
+	 *	@return		bool
+	 */
+	public function isPackageInstalled(): bool
+	{
+		return FALSE;
+	}
+
+	/**
 	 *	Sets path to cache folder.
 	 *	@access		public
 	 *	@param		string			$path			Path to cache folder

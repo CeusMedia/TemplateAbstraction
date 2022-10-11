@@ -30,6 +30,14 @@ use Smarty as SmartyEngine;
 class Smarty extends AdapterAbstract
 {
 	/**
+	 *	@return		bool
+	 */
+	public function isPackageInstalled(): bool
+	{
+		return class_exists( SmartyEngine::class );
+	}
+
+	/**
 	 *	Returns rendered template content.
 	 *	@access		public
 	 *	@return		string

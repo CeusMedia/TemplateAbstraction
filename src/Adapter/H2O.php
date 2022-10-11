@@ -34,6 +34,14 @@ use RuntimeException;
 class H2O extends AdapterAbstract
 {
 	/**
+	 *	@return		bool
+	 */
+	public function isPackageInstalled(): bool
+	{
+		return class_exists( H2oEngine::class );
+	}
+
+	/**
 	 *	Returns rendered template content.
 	 *	@access		public
 	 *	@return		string
@@ -50,7 +58,7 @@ class H2O extends AdapterAbstract
 		];
 
 		$engine		= new H2oEngine( $this->sourceFile, $options );
-		$content	= $engine->render( $this->data );
+		$content	= $engine->render();
 		return $this->removeTypeIdentifier( $content );
 	}
 }

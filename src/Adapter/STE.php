@@ -16,7 +16,7 @@ declare(strict_types=1);
 namespace CeusMedia\TemplateAbstraction\Adapter;
 
 use CeusMedia\TemplateAbstraction\AdapterAbstract;
-use CeusMedia\TemplateEngine\Template as TemplateEngineTemplate;
+use CeusMedia\TemplateEngine\Template as TemplateEngine;
 use RuntimeException;
 
 
@@ -32,6 +32,14 @@ use RuntimeException;
 class STE extends AdapterAbstract
 {
 	/**
+	 *	@return		bool
+	 */
+	public function isPackageInstalled(): bool
+	{
+		return class_exists( TemplateEngine::class );
+	}
+
+	/**
 	 *	Returns rendered template content.
 	 *	@access		public
 	 *	@return		string
@@ -41,8 +49,8 @@ class STE extends AdapterAbstract
 	{
 		if( NULL === $this->sourceFile )
 			throw new RuntimeException( 'No source file set' );
-		TemplateEngineTemplate::setTemplatePath( $this->sourcePath );
-		$template	= new TemplateEngineTemplate();
+		TemplateEngine::setTemplatePath( $this->sourcePath );
+		$template	= new TemplateEngine();
 		$template->setTemplate( $this->sourceFile );
 		$template->add( $this->data );
 		$content	= $template->render();

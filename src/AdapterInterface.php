@@ -42,6 +42,8 @@ interface AdapterInterface
 	 */
 	public function addData( string $key, $value, bool $force = FALSE ): AdapterInterface;
 
+	public function isPackageInstalled(): bool;
+
 	/**
 	 *	Returns rendered template content.
 	 *	@access		public

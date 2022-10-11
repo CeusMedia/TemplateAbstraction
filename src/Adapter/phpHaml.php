@@ -31,6 +31,14 @@ use RuntimeException;
 class phpHaml extends AdapterAbstract
 {
 	/**
+	 *	@return		bool
+	 */
+	public function isPackageInstalled(): bool
+	{
+		return class_exists( HamlEngine::class );
+	}
+
+	/**
 	 *	Returns rendered template content.
 	 *	@access		public
 	 *	@return		string

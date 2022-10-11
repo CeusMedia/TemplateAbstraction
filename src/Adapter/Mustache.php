@@ -32,6 +32,14 @@ use RuntimeException;
 class Mustache extends AdapterAbstract
 {
 	/**
+	 *	@return		bool
+	 */
+	public function isPackageInstalled(): bool
+	{
+		return class_exists( MustacheEngine::class );
+	}
+
+	/**
 	 *	Returns rendered template content.
 	 *	@access		public
 	 *	@return		string
@@ -42,9 +50,8 @@ class Mustache extends AdapterAbstract
 		if( NULL === $this->sourceFile )
 			throw new RuntimeException( 'No source file set' );
 //		$settings	= (object) $this->factory->getEngineSettings( 'Mustache' );
-		$options	= array(
-			'extension'	=> /*isset( $settings->extension ) ? $settings->extension : */'html',
-		);
+//		$options	= ['extension' => $settings->extension ?: 'html'];
+		$options	= ['extension' => 'html'];
 		$engine		= new MustacheEngine();
 		$loader		= new MustacheFilesystemLoader( $this->sourcePath, $options );
 		$engine->setLoader( $loader );

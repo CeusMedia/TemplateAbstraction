@@ -109,7 +109,7 @@ class Factory
 	public function identifyType( string $fileName ): ?string
 	{
 		$content	= FileReader::load( $this->pathTemplates.$fileName );
-		$matches	= array();
+		$matches	= [];
 		if( FALSE !== preg_match_all( $this->patternType, $content, $matches ) )
 			return $matches[1][0];
 		return NULL;
@@ -123,7 +123,7 @@ class Factory
 	public function identifyEngine( string $filePath ): Engine
 	{
 		$content	= FileReader::load( $this->pathTemplates.$filePath );
-		$matches	= array();
+		$matches	= [];
 		if( 0 !== preg_match_all( $this->patternType, $content, $matches ) ){
 			foreach( $this->environment->getEngines() as $engine ){
 				$result = preg_match( $engine->getIdentifier(), $matches[1][0] );
@@ -152,7 +152,9 @@ class Factory
 			throw new RuntimeException( 'Adapter '.$engineKey.' is not existing' );
 		$reflection	= new ReflectionClass( $adapterClass );
 		/** @var AdapterInterface $template */
-		$template	= $reflection->newInstanceArgs( array( $this ) );
+		$template	= $reflection->newInstanceArgs( [$this] );
+		if( !$template->isPackageInstalled() )
+			throw new RuntimeException( 'Package for engine "'.$engineKey.'" is not installed' );
 		$template->setSourcePath( $this->pathTemplates );
 		if( strlen( trim( $this->pathCache ) ) > 0 )
 			$template->setCachePath( $this->pathCache );

@@ -51,16 +51,21 @@ try{
 	);
 
 	foreach( $files as $engine => $file ){
-		$template	= $factory->getTemplate($file);
-		$template->addData('userArray', $dataUserArray);
-		$template->addData('userObject', $dataUserObject);
-		$template->addData('engine', $factory->identifyType($file));
-		$key	= uniqid('engine-'.$engine);
 		try{
-			$content	= $template->render();
-		}
-		catch( Exception $e ){
-			$content	= HtmlExceptionView::render( $e );
+			$template	= $factory->getTemplate( $file );
+			$template->addData( 'userArray', $dataUserArray );
+			$template->addData( 'userObject', $dataUserObject );
+			$template->addData( 'engine', $factory->identifyType( $file ) );
+			$key	= uniqid( 'engine-'.$engine );
+			try{
+				$content	= $template->render();
+			}
+			catch( Exception $e ){
+				$content	= HtmlExceptionView::render( $e );
+			}
+		} catch( Exception $e ){
+			$examples[]	=  '<h3>'.$engine.'</h3>'.$e->getMessage().'.';
+			continue;
 		}
 		$examples[]	= '<h3>'.$engine.'</h3>
 
