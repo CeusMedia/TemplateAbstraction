@@ -52,34 +52,34 @@
     }
   },
   "scripts": {
-    "dev:install": "composer install --quiet",
-    "dev:update": "composer update",
+    "dev:install-quiet": "composer install --quiet",
+    "dev:update-quiet": "composer update --quiet",
     "dev:phpunit": [
-      "@dev:install",
-      "php vendor/bin/phpunit --configuration phpunit9.xml --testsuite units"
+      "@dev:install-quiet",
+      "php vendor/bin/phpunit --configuration util/phpunit9.xml --testsuite units"
     ],
     "dev:phpstan": [
-      "@dev:install",
-      "vendor/bin/phpstan analyze --configuration=phpstan.neon --memory-limit=1G --xdebug --verbose"
+      "@dev:install-quiet",
+      "vendor/bin/phpstan analyze --configuration=util/phpstan.neon --memory-limit=1G --xdebug --verbose"
     ],
     "dev:phpstan-clear": [
-      "@dev:install",
+      "@dev:install-quiet",
       "vendor/bin/phpstan clear-result-cache --verbose"
     ],
     "dev:phpstan-save": [
-      "@dev:install",
-      "vendor/bin/phpstan analyse --generate-baseline phpstan-baseline.neon --verbose"
+      "@dev:install-quiet",
+      "vendor/bin/phpstan analyse --configuration=util/phpstan.neon --generate-baseline util/phpstan-baseline.neon --xdebug --verbose"
     ],
     "dev:rector": [
-      "@dev:install",
-      "vendor/bin/rector process --config=rector.php --dry-run"
+      "@dev:install-quiet",
+      "vendor/bin/rector process --config=util/rector.php --dry-run"
     ],
     "dev:rector-fix": [
-      "@dev:install",
-      "vendor/bin/rector process --config=rector.php"
+      "@dev:install-quiet",
+      "vendor/bin/rector process --config=util/rector.php"
     ],
     "dev:test-syntax": [
-      "@dev:install",
+      "@dev:install-quiet",
       "vendor/bin/parallel-lint . -j 10 --colors --exclude vendor"
     ]
   },

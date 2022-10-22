@@ -1,12 +1,12 @@
 includes:
-	- vendor/phpstan/phpstan-strict-rules/rules.neon
-	- phpstan-baseline.neon
+	- ../vendor/phpstan/phpstan-strict-rules/rules.neon
+	- ./phpstan-baseline.neon
 
 parameters:
 	phpVersion: 70400
 	level: max
 	paths:
-		- src
+		- ../src
 	checkMissingIterableValueType: false
 	checkGenericClassInNonGenericObjectType: false
 	reportMaybesInPropertyPhpDocTypes: false
