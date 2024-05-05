@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace CeusMedia\TemplateAbstraction;
 
+use CeusMedia\Common\Exception\FileNotExisting;
 use CeusMedia\Common\FS\File\Reader as FileReader;
 use ReflectionClass;
 use ReflectionException;
@@ -108,10 +109,15 @@ class Factory
 	 */
 	public function identifyType( string $fileName ): ?string
 	{
-		$content	= FileReader::load( $this->pathTemplates.$fileName );
-		$matches	= [];
-		if( FALSE !== preg_match_all( $this->patternType, $content, $matches ) )
-			return $matches[1][0];
+		try{
+			/** @var string $content */
+			$content	= FileReader::load( $this->pathTemplates.$fileName );
+			$matches	= [];
+			if( FALSE !== preg_match_all( $this->patternType, $content, $matches ) )
+				return $matches[1][0];
+		}
+		catch( FileNotExisting ){
+		}
 		return NULL;
 	}
 
@@ -122,14 +128,19 @@ class Factory
 	 */
 	public function identifyEngine( string $filePath ): Engine
 	{
-		$content	= FileReader::load( $this->pathTemplates.$filePath );
-		$matches	= [];
-		if( 0 !== preg_match_all( $this->patternType, $content, $matches ) ){
-			foreach( $this->environment->getEngines() as $engine ){
-				$result = preg_match( $engine->getIdentifier(), $matches[1][0] );
-				if( FALSE !== $result && 0 < $result )
-					return $engine;
+		try{
+			/** @var string $content */
+			$content	= FileReader::load( $this->pathTemplates.$filePath );
+			$matches	= [];
+			if( 0 !== preg_match_all( $this->patternType, $content, $matches ) ){
+				foreach( $this->environment->getEngines() as $engine ){
+					$result = preg_match( $engine->getIdentifier(), $matches[1][0] );
+					if( FALSE !== $result && 0 < $result )
+						return $engine;
+				}
 			}
+		}
+		catch( FileNotExisting ){
 		}
 		return $this->environment->getDefaultEngine();
 	}
