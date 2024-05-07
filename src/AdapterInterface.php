@@ -1,13 +1,16 @@
 <?php
+declare(strict_types=1);
+
 /**
  *	Interface for each template engine in factory.
  *	@category		Library
  *	@package		CeusMedia_TemplateAbstraction
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@copyright		2010-2021 Christian Würker
- *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
+ *	@copyright		2010-2022 Christian Würker
+ *	@license		https://www.gnu.org/licenses/gpl-3.0.txt GPL 3
  *	@link			https://github.com/CeusMedia/TemplateAbstraction
  */
+
 namespace CeusMedia\TemplateAbstraction;
 
 /**
@@ -15,10 +18,11 @@ namespace CeusMedia\TemplateAbstraction;
  *	@category		Library
  *	@package		CeusMedia_TemplateAbstraction
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@copyright		2010-2021 Christian Würker
- *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
+ *	@copyright		2010-2022 Christian Würker
+ *	@license		https://www.gnu.org/licenses/gpl-3.0.txt GPL 3
  *	@link			https://github.com/CeusMedia/TemplateAbstraction
  */
+
 interface AdapterInterface
 {
 	/**
@@ -34,9 +38,11 @@ interface AdapterInterface
 	 *	@param		string			$key			Data pair key
 	 *	@param		mixed			$value			Data pair value
 	 *	@param		boolean			$force			Flag: override existing data pair
-	 *	@return		AdapterAbstract
+	 *	@return		AdapterInterface
 	 */
-	public function addData( string $key, $value, bool $force = FALSE ): AdapterAbstract;
+	public function addData( string $key, $value, bool $force = FALSE ): AdapterInterface;
+
+	public function isPackageInstalled(): bool;
 
 	/**
 	 *	Returns rendered template content.
@@ -49,48 +55,48 @@ interface AdapterInterface
 	 *	Sets path to compile folder.
 	 *	@access		public
 	 *	@param		string			$path			Path to cache folder
-	 *	@return		AdapterAbstract
+	 *	@return		AdapterInterface
 	 */
-	public function setCachePath( string $path ): AdapterAbstract;
+	public function setCachePath( string $path ): AdapterInterface;
 
 	/**
 	 *	Sets path to cache or compile folder.
 	 *	@access		public
 	 *	@param		string			$path			Path to compile folder
-	 *	@return		AdapterAbstract
+	 *	@return		AdapterInterface
 	 */
-	public function setCompilePath( string $path ): AdapterAbstract;
+	public function setCompilePath( string $path ): AdapterInterface;
 
 	/**
 	 *	Assigns a map of context data for template.
 	 *	@access		public
 	 *	@param		array<string,mixed>	$map			Map of context data pairs
 	 *	@param		boolean				$force			Flag: override existing data pair
-	 *	@return		AdapterAbstract
+	 *	@return		AdapterInterface
 	 */
-	public function setData( array $map, bool $force = FALSE ): AdapterAbstract;
+	public function setData( array $map, bool $force = FALSE ): AdapterInterface;
 
 	/**
 	 *	Sets name of template file in template folder.
 	 *	@access		public
 	 *	@param		string			$fileName		Name of template file in template folder
-	 *	@return		AdapterAbstract
+	 *	@return		AdapterInterface
 	 */
-	public function setSourceFile( string $fileName ): AdapterAbstract;
+	public function setSourceFile( string $fileName ): AdapterInterface;
 
 	/**
 	 *	Sets path to template folder.
 	 *	@access		public
 	 *	@param		string			$path			Path to template folder
-	 *	@return		AdapterAbstract
+	 *	@return		AdapterInterface
 	 */
-	public function setSourcePath( string $path ): AdapterAbstract;
+	public function setSourcePath( string $path ): AdapterInterface;
 
 	/**
 	 *	Sets template content by string.
 	 *	@access		public
 	 *	@param		string			$string			Template content
-	 *	@return		AdapterAbstract
+	 *	@return		AdapterInterface
 	 */
-	public function setSourceString( string $string ): AdapterAbstract;
+	public function setSourceString( string $string ): AdapterInterface;
 }

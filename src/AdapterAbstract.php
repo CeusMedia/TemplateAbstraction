@@ -1,13 +1,16 @@
 <?php
+declare(strict_types=1);
+
 /**
  *	Abstract basic adapter implementation.
  *	@category		Library
  *	@package		CeusMedia_TemplateAbstraction
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@copyright		2010-2021 Christian Würker
- *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
+ *	@copyright		2010-2022 Christian Würker
+ *	@license		https://www.gnu.org/licenses/gpl-3.0.txt GPL 3
  *	@link			https://github.com/CeusMedia/TemplateAbstraction
  */
+
 namespace CeusMedia\TemplateAbstraction;
 
 use RuntimeException;
@@ -19,32 +22,32 @@ use function version_compare;
  *	@category		Library
  *	@package		CeusMedia_TemplateAbstraction
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@copyright		2010-2021 Christian Würker
- *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
+ *	@copyright		2010-2022 Christian Würker
+ *	@license		https://www.gnu.org/licenses/gpl-3.0.txt GPL 3
  *	@link			https://github.com/CeusMedia/TemplateAbstraction
  */
 abstract class AdapterAbstract implements AdapterInterface
 {
 	/** @var	array<string,mixed>		$data				... */
-	protected $data			= array();
+	protected array $data			= [];
 
-	/** @var	Factory		$factory			... */
-	protected $factory;
+	/** @var	Factory				$factory			... */
+	protected Factory $factory;
 
-	/** @var	string|null		$fileSource			... */
-	protected $fileSource	= NULL;
+	/** @var	string|null			$sourceFile			... */
+	protected ?string $sourceFile	= NULL;
 
-	/** @var	string			$pathSource			... */
-	protected $pathSource	= '';
+	/** @var	string				$sourcePath			... */
+	protected string $sourcePath	= '';
 
-	/** @var	string			$pathCache			... */
-	protected $pathCache	= '';
+	/** @var	string				$pathCache			... */
+	protected string $pathCache		= '';
 
-	/** @var	string			$pathCompile		... */
-	protected $pathCompile	= '';
+	/** @var	string				$pathCompile		... */
+	protected string $pathCompile	= '';
 
-	/** @var	string			$template			... */
-	protected $template		= '';
+	/** @var	string				$sourceString			... */
+	protected string $sourceString		= '';
 
 	/**
 	 *	Constructor.
@@ -63,9 +66,10 @@ abstract class AdapterAbstract implements AdapterInterface
 	 *	@param		string			$key			Data pair key
 	 *	@param		mixed			$value			Data pair value
 	 *	@param		boolean			$force			Flag: override existing data pair
-	 *	@return		AdapterAbstract
+	 *	@return		AdapterInterface
+	 *	@throws		RuntimeException
 	 */
-	public function addData( string $key, $value, bool $force = FALSE ): AdapterAbstract
+	public function addData( string $key, $value, bool $force = FALSE ): AdapterInterface
 	{
 		if( isset( $this->data[$key] ) && !$force )
 			throw new RuntimeException( 'Template data key "'.$key.'" is already defined' );
@@ -74,12 +78,20 @@ abstract class AdapterAbstract implements AdapterInterface
 	}
 
 	/**
+	 *	@return		bool
+	 */
+	public function isPackageInstalled(): bool
+	{
+		return FALSE;
+	}
+
+	/**
 	 *	Sets path to cache folder.
 	 *	@access		public
 	 *	@param		string			$path			Path to cache folder
-	 *	@return		AdapterAbstract
+	 *	@return		AdapterInterface
 	 */
-	public function setCachePath( string $path ): AdapterAbstract
+	public function setCachePath( string $path ): AdapterInterface
 	{
 		$this->pathCache	= $path;
 		return $this;
@@ -89,9 +101,9 @@ abstract class AdapterAbstract implements AdapterInterface
 	 *	Sets path to compile folder.
 	 *	@access		public
 	 *	@param		string			$path			Path to compile folder
-	 *	@return		AdapterAbstract
+	 *	@return		AdapterInterface
 	 */
-	public function setCompilePath( string $path ): AdapterAbstract
+	public function setCompilePath( string $path ): AdapterInterface
 	{
 		$this->pathCompile	= $path;
 		return $this;
@@ -102,9 +114,9 @@ abstract class AdapterAbstract implements AdapterInterface
 	 *	@access		public
 	 *	@param		array<string,mixed>	$map			Map of context data pairs
 	 *	@param		boolean				$force			Flag: override existing data pair
-	 *	@return		AdapterAbstract
+	 *	@return		AdapterInterface
 	 */
-	public function setData( array $map, bool $force = FALSE ): AdapterAbstract
+	public function setData( array $map, bool $force = FALSE ): AdapterInterface
 	{
 		foreach( $map as $key => $value )
 			$this->addData($key, $value, $force );
@@ -115,11 +127,11 @@ abstract class AdapterAbstract implements AdapterInterface
 	 *	Sets name of template file in template folder.
 	 *	@access		public
 	 *	@param		string			$fileName		Name of template file in template folder
-	 *	@return		AdapterAbstract
+	 *	@return		AdapterInterface
 	 */
-	public function setSourceFile( string $fileName ): AdapterAbstract
+	public function setSourceFile( string $fileName ): AdapterInterface
 	{
-		$this->fileSource	= $fileName;
+		$this->sourceFile	= $fileName;
 		return $this;
 	}
 
@@ -127,11 +139,11 @@ abstract class AdapterAbstract implements AdapterInterface
 	 *	Sets path to template folder.
 	 *	@access		public
 	 *	@param		string			$path			Path to template folder
-	 *	@return		AdapterAbstract
+	 *	@return		AdapterInterface
 	 */
-	public function setSourcePath( string $path ): AdapterAbstract
+	public function setSourcePath( string $path ): AdapterInterface
 	{
-		$this->pathSource	= $path;
+		$this->sourcePath	= $path;
 		return $this;
 	}
 
@@ -139,11 +151,11 @@ abstract class AdapterAbstract implements AdapterInterface
 	 *	Sets template content by string.
 	 *	@access		public
 	 *	@param		string			$string			Template content
-	 *	@return		AdapterAbstract
+	 *	@return		AdapterInterface
 	 */
-	public function setSourceString( string $string ): AdapterAbstract
+	public function setSourceString( string $string ): AdapterInterface
 	{
-		$this->template	= $string;
+		$this->sourceString	= $string;
 		return $this;
 	}
 
@@ -159,7 +171,7 @@ abstract class AdapterAbstract implements AdapterInterface
 		$result	= preg_replace( $this->factory->patternType, '', $content );
 		if( NULL === $result ){
 			$errorNr = preg_last_error();
-			if( version_compare( (string) phpversion(), "8", '>=' ) )
+			if( version_compare( phpversion(), "8", '>=' ) )
 				$errorMsg	= preg_last_error_msg();
 			else{
 				$pregConstantsOnReplace = [

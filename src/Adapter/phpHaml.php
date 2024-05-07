@@ -1,15 +1,18 @@
 <?php
+declare(strict_types=1);
+
 /**
  *	Adapter for phpHaml template engine.
  *	@category		Library
  *	@package		CeusMedia_TemplateAbstraction_Adapter
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@copyright		2010-2021 Christian Würker
- *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
+ *	@copyright		2010-2022 Christian Würker
+ *	@license		https://www.gnu.org/licenses/gpl-3.0.txt GPL 3
  *	@link			https://github.com/CeusMedia/TemplateAbstraction
  *	@see			https://haml.info/docs/yardoc/file.REFERENCE.html Templating Guide
  *	@see			https://github.com/kriss0r/phphaml @GitHub
  */
+
 namespace CeusMedia\TemplateAbstraction\Adapter;
 
 use CeusMedia\TemplateAbstraction\AdapterAbstract;
@@ -21,12 +24,20 @@ use RuntimeException;
  *	@category		Library
  *	@package		CeusMedia_TemplateAbstraction_Adapter
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@copyright		2010-2021 Christian Würker
- *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
+ *	@copyright		2010-2022 Christian Würker
+ *	@license		https://www.gnu.org/licenses/gpl-3.0.txt GPL 3
  *	@link			https://github.com/CeusMedia/TemplateAbstraction
  */
 class phpHaml extends AdapterAbstract
 {
+	/**
+	 *	@return		bool
+	 */
+	public function isPackageInstalled(): bool
+	{
+		return class_exists( HamlEngine::class );
+	}
+
 	/**
 	 *	Returns rendered template content.
 	 *	@access		public
@@ -35,12 +46,11 @@ class phpHaml extends AdapterAbstract
 	 */
 	public function render(): string
 	{
-		if( NULL === $this->fileSource )
+		if( NULL === $this->sourceFile )
 			throw new RuntimeException( 'No source file set' );
-		$engine	= new HamlEngine( $this->pathSource, $this->pathCache );
+		$engine	= new HamlEngine( $this->sourcePath, $this->pathCache );
 		$engine->append( $this->data );
-		$content	= $engine->fetch( $this->fileSource );
-		$content	= $this->removeTypeIdentifier( $content );
-		return $content;
+		$content	= $engine->fetch( $this->sourceFile );
+		return $this->removeTypeIdentifier( $content );
 	}
 }

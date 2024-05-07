@@ -1,71 +1,74 @@
 <?php
+declare(strict_types=1);
+
 /**
- *	Data type for registerable template engines.
+ *	Data type for register-able template engines.
  *	@category		Library
  *	@package		CeusMedia_TemplateAbstraction
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@copyright		2010-2021 Christian Würker
- *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
+ *	@copyright		2010-2022 Christian Würker
+ *	@license		https://www.gnu.org/licenses/gpl-3.0.txt GPL 3
  *	@link			https://github.com/CeusMedia/TemplateAbstraction
  */
+
 namespace CeusMedia\TemplateAbstraction;
 
 use RangeException;
 
 /**
- *	Data type for registerable template engines.
+ *	Data type for register-able template engines.
  *	@category		Library
  *	@package		CeusMedia_TemplateAbstraction
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@copyright		2010-2021 Christian Würker
- *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
+ *	@copyright		2010-2022 Christian Würker
+ *	@license		https://www.gnu.org/licenses/gpl-3.0.txt GPL 3
  *	@link			https://github.com/CeusMedia/TemplateAbstraction
  */
 class Engine
 {
-	const PRIORITY_LOW			= 0;
-	const PRIORITY_NORMAL		= 1;
-	const PRIORITY_HIGH			= 2;
+	public const PRIORITY_LOW			= 0;
+	public const PRIORITY_NORMAL		= 1;
+	public const PRIORITY_HIGH			= 2;
 
-	const PRIORITIES			= [
+	public const PRIORITIES				= [
 		self::PRIORITY_LOW,
 		self::PRIORITY_NORMAL,
 		self::PRIORITY_HIGH,
 	];
 
-	const STATUS_DISABLED		= 0;
-	const STATUS_ENABLED		= 1;
-	const STATUS_INSTALLED		= 2;
+	public const STATUS_DISABLED		= 0;
+	public const STATUS_ENABLED			= 1;
+	public const STATUS_INSTALLED		= 2;
 
-	const STATUSES				= [
+	public const STATUSES				= [
 		self::STATUS_DISABLED,
 		self::STATUS_ENABLED,
 		self::STATUS_INSTALLED,
 	];
 
 	/** @var	string */
-	protected $key;
+	protected string $key;
 
 	/** @var	string */
-	protected $composerPackage;
+	protected string $composerPackage;
 
 	/** @var	string */
-	protected $adapterClass;
+	protected string $adapterClass;
 
 	/** @var	integer */
-	protected $status			= self::STATUS_ENABLED;
+	protected int $status			= self::STATUS_ENABLED;
 
 	/** @var	string */
-	protected $title;
+	protected string $title;
 
 	/** @var	string */
-	protected $identifier;
+	protected string $identifier;
 
 	/** @var	integer */
-	protected $priority			= self::PRIORITY_NORMAL;
+	protected int $priority			= self::PRIORITY_NORMAL;
 
 	/** @var	string */
-	protected $description;
+	protected string $description;
 
 	/**
 	 *	Constructor.
@@ -97,6 +100,7 @@ class Engine
 	 *	Returns composer package, if set.
 	 *	@access		public
 	 *	@return		string|NULL
+	 * @noinspection PhpUnused
 	 */
 	public function getComposerPackage(): ?string
 	{

@@ -5,7 +5,7 @@ This library provides an abstraction layer for template engines.
 [![Package version](http://img.shields.io/packagist/v/ceus-media/template-abstraction.svg?style=flat-square)](https://packagist.org/packages/ceus-media/template-abstraction)
 [![Monthly downloads](http://img.shields.io/packagist/dt/ceus-media/template-abstraction.svg?style=flat-square)](https://packagist.org/packages/ceus-media/template-abstraction)
 [![PHP version](http://img.shields.io/packagist/php-v/ceus-media/template-abstraction.svg?style=flat-square)](https://packagist.org/packages/ceus-media/template-abstraction)
-[![PHPStan level](https://img.shields.io/badge/PHPStan-level%208-brightgreen.svg?style=flat-square)](https://packagist.org/packages/ceus-media/template-abstraction)
+[![PHPStan level](https://img.shields.io/badge/PHPStan-level%209-brightgreen.svg?style=flat-square)](https://packagist.org/packages/ceus-media/template-abstraction)
 [![License](https://img.shields.io/packagist/l/ceus-media/template-abstraction.svg?style=flat-square)](https://packagist.org/packages/ceus-media/template-abstraction)
 [![Release date](https://img.shields.io/github/release-date/CeusMedia/TemplateAbstraction.svg?style=flat-square)](https://github.com/CeusMedia/TemplateAbstraction)
 [![Commit date](https://img.shields.io/github/last-commit/CeusMedia/TemplateAbstraction.svg?style=flat-square)](https://github.com/CeusMedia/TemplateAbstraction)

@@ -1,0 +1,11 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Parameter \\#1 \\$sPath of class HamlParser constructor expects bool, string given\\.$#"
+			count: 1
+			path: ../src/Adapter/phpHaml.php
+
+		-
+			message: "#^Parameter \\#2 \\$bCompile of class HamlParser constructor expects bool, string given\\.$#"
+			count: 1
+			path: ../src/Adapter/phpHaml.php
