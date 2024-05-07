@@ -53,7 +53,7 @@ class Factory
 	protected string $pathCompile			= 'templates/compiled/';
 
 	/**	@var		string					$patternType		... */
-	public string$patternType				= '/^<!--Engine:(\S+)-->\n?\r?/';
+	public string $patternType				= '/^<!--Engine:(\S+)-->\r?\n?/';
 
 	/**
 	 *	Constructor.
