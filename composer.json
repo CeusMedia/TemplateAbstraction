@@ -17,34 +17,34 @@
   },
   "minimum-stability": "dev",
   "require": {
-    "php": "^7.4 | ^8",
-    "ceus-media/common": "^0.9 | 0.9.x-dev",
-    "ceus-media/template-engine": "dev-master",
-    "twig/twig": "3.x-dev",
-    "smarty/smarty": "^4.2",
-    "dwoo/dwoo": "dev-master",
-    "kriss0r/php-haml": "dev-master",
-    "blesta/h2o": "dev-master",
-    "phptal/phptal": "dev-master",
-    "mustache/mustache": "dev-main",
-    "latte/latte": "v2.11.x-dev"
+    "php": "^8.1",
+    "ceus-media/common": "1.0.* | 1.0.x-dev",
+    "ceus-media/template-engine": "0.5.* | 0.5.x-dev"
   },
   "require-dev": {
-    "phpunit/phpunit": "*",
-    "phpstan/phpstan": "*",
-    "phpstan/phpstan-strict-rules": "*",
-    "php-parallel-lint/php-parallel-lint": "^1.3 | dev-master",
-    "rector/rector": "*"
+    "phpunit/phpunit": "10.*",
+    "phpstan/phpstan": "1.*",
+    "phpstan/phpstan-strict-rules": "1.*",
+    "php-parallel-lint/php-parallel-lint": "1.*",
+    "rector/rector": "1.*",
+    "blesta/h2o": "dev-master",
+    "dwoo/dwoo": "^1.3",
+    "kriss0r/php-haml": "dev-master",
+    "latte/latte": "^3.0",
+    "mustache/mustache": "^2.13",
+    "phptal/phptal": "1.5.0",
+    "smarty/smarty": "^4.2",
+    "twig/twig": "^3.3"
   },
   "suggest": {
-    "smarty/smarty": "^3.1",
-    "phptal/phptal": "1.5.0",
-    "mustache/mustache": "^2.13",
+    "blesta/h2o": "dev-master",
     "dwoo/dwoo": "^1.3",
-    "twig/twig": "^3.3",
-    "latte/latte": "^2.10",
     "kriss0r/php-haml": "dev-master",
-    "blesta/h2o": "dev-master"
+    "latte/latte": "^3.0",
+    "mustache/mustache": "^2.13",
+    "phptal/phptal": "1.5.0",
+    "smarty/smarty": "^4.2",
+    "twig/twig": "^3.3"
   },
   "autoload": {
     "psr-4": {
@@ -56,11 +56,11 @@
     "dev:update-quiet": "composer update --quiet",
     "dev:phpunit": [
       "@dev:install-quiet",
-      "php vendor/bin/phpunit --configuration util/phpunit9.xml --testsuite units"
+      "php vendor/bin/phpunit --configuration util/phpunit.xml --testsuite units"
     ],
     "dev:phpstan": [
       "@dev:install-quiet",
-      "vendor/bin/phpstan analyze --configuration=util/phpstan.neon --memory-limit=1G --xdebug --verbose"
+      "vendor/bin/phpstan analyze --configuration=util/phpstan.neon --memory-limit=1G --verbose"
     ],
     "dev:phpstan-clear": [
       "@dev:install-quiet",
@@ -68,7 +68,7 @@
     ],
     "dev:phpstan-save": [
       "@dev:install-quiet",
-      "vendor/bin/phpstan analyse --configuration=util/phpstan.neon --generate-baseline util/phpstan-baseline.neon --xdebug --verbose"
+      "vendor/bin/phpstan analyse --configuration=util/phpstan.neon --generate-baseline util/phpstan-baseline.neon --verbose"
     ],
     "dev:rector": [
       "@dev:install-quiet",

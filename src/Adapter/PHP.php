@@ -53,7 +53,9 @@ class PHP extends AdapterAbstract
 	{
 		if( NULL === $this->sourceFile )
 			throw new RuntimeException( 'No source file set' );
-		$filePath	= $this->sourcePath.$this->sourceFile;
+		$filePath	= $this->sourceFile;
+		if( !str_starts_with( $this->sourceFile, '/' ) )
+			$filePath	= $this->sourcePath.$this->sourceFile;
 		$file		= new File( $filePath );
 		if( !$file->exists() )
 			throw new RuntimeException( 'Template file \''.$filePath.'\' is not existing' );

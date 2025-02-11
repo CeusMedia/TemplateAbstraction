@@ -1,6 +1,6 @@
-[CMC]
-adapterClass	= "CeusMedia\\TemplateAbstraction\\Adapter\\CMC"
-title			= "Simple logic-less template engine included in CeusMedia::Common."
+[STE]
+adapterClass	= "CeusMedia\\TemplateAbstraction\\Adapter\\STE"
+title			= "Simple Template Engine by Ceus Media."
 
 [Smarty]
 adapterClass	= "CeusMedia\\TemplateAbstraction\\Adapter\\Smarty"
@@ -33,7 +33,3 @@ title			= "Latte Template Engine."
 [H2O]
 adapterClass	= "CeusMedia\\TemplateAbstraction\\Adapter\\H2O"
 title			= "H2O Template Engine."
-
-[STE]
-adapterClass	= "CeusMedia\\TemplateAbstraction\\Adapter\\STE"
-title			= "Simple Template Engine by Ceus Media."
