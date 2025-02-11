@@ -2,12 +2,12 @@
 
 This library provides an abstraction layer for template engines.
 
-![PHP version](https://img.shields.io/badge/PHP-%5E8.1-blue?style=flat-square&color=777BB4)
+![PHP version](https://img.shields.io/badge/PHP-%5E8.3-blue?style=flat-square&color=777BB4)
 [![License](https://img.shields.io/packagist/l/ceus-media/template-abstraction.svg?style=flat-square)](https://packagist.org/packages/ceus-media/template-abstraction)
 ![PHPStan level](https://img.shields.io/badge/PHPStan_level-max+strict-darkgreen?style=flat-square)
 
-![Branch](https://img.shields.io/badge/Branch-0.5.x-blue?style=flat-square)
-![Release](https://img.shields.io/badge/Release-0.4.0-blue?style=flat-square)
+![Branch](https://img.shields.io/badge/Branch-0.6.x-blue?style=flat-square)
+![Release](https://img.shields.io/badge/Release-0.6.0-blue?style=flat-square)
 [![Package version](http://img.shields.io/packagist/v/ceus-media/template-abstraction.svg?style=flat-square)](https://packagist.org/packages/ceus-media/template-abstraction)
 
 [![Commit date](https://img.shields.io/github/last-commit/CeusMedia/TemplateAbstraction.svg?style=flat-square)](https://github.com/CeusMedia/TemplateAbstraction)
